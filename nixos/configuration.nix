@@ -80,6 +80,10 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.systemd-boot.configurationLimit = 10;
+  boot.extraModprobeConfig = ''
+    options snd-hda-intel dmic_detect=0
+    options snd-intel-dspcfg dsp_driver=1
+  '';
 
   boot.initrd.luks.devices."luks-4d3dca95-cccf-48da-b970-cae48ccecfd9".device = "/dev/disk/by-uuid/4d3dca95-cccf-48da-b970-cae48ccecfd9";
 
@@ -92,6 +96,14 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
+
+  # Enable bluetooth
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+  };
+
+  hardware.enableAllFirmware = true;
 
   # Set your time zone.
   time.timeZone = "Europe/Amsterdam";
@@ -137,6 +149,8 @@
     pulse.enable = true;
   };
 
+  services.tuned.enable = true;
+  services.upower.enable = true;
 
   users.users = {
     dave = {
@@ -152,6 +166,8 @@
     git
     vim
     wget
+    alsa-utils
+    alsa-firmware
   ];
 
   environment.variables.EDITOR = "vim";

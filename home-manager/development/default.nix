@@ -1,0 +1,10 @@
+{
+  inputs,
+  ...
+}:
+
+{
+  imports = [
+    ./languages.nix
+  ];
+}
