@@ -166,8 +166,6 @@
     git
     vim
     wget
-    alsa-utils
-    alsa-firmware
   ];
 
   environment.variables.EDITOR = "vim";

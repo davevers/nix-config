@@ -1,10 +1,11 @@
-{ pkgs, ...}: {
+{ pkgs, ... }:
+{
   home.packages = with pkgs; [
     # Python
-    python
+    python3
     uv
     ruff
-    basedpywright
+    basedpyright
 
     # Lua
     lua-language-server

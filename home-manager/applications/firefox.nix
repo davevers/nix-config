@@ -1,4 +1,10 @@
-{ config, pkgs, inputs, ...}: {
+{
+  config,
+  pkgs,
+  inputs,
+  ...
+}:
+{
   programs.firefox = {
     enable = true;
     profiles.${config.home.username} = {
@@ -18,13 +24,21 @@
         engines = {
           nix-packages = {
             name = "Nix Packages";
-            urls = [{
-              template = "https://search.nixos.org/packages";
-              params = [
-                { name = "type"; value = "packages"; }
-                { name = "query"; value = "{searchTerms}"; }
-              ];
-            }];
+            urls = [
+              {
+                template = "https://search.nixos.org/packages";
+                params = [
+                  {
+                    name = "type";
+                    value = "packages";
+                  }
+                  {
+                    name = "query";
+                    value = "{searchTerms}";
+                  }
+                ];
+              }
+            ];
 
             icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
             definedAliases = [ "@np" ];
@@ -32,7 +46,7 @@
 
           nixos-wiki = {
             name = "NixOS Wiki";
-            urls = [{ template = "https://wiki.nixos.org/w/index.php?search={searchTerms}"; }];
+            urls = [ { template = "https://wiki.nixos.org/w/index.php?search={searchTerms}"; } ];
             iconMapObj."16" = "https://wiki.nixos.org/favicon.ico";
             definedAliases = [ "@nw" ];
           };
@@ -58,6 +72,11 @@
         kagi-search
         kagi-translate
       ];
+      extensions.force = true;
     };
+  };
+  stylix.targets.firefox = {
+    profileNames = [ "${config.home.username}" ];
+    colorTheme.enable = true;
   };
 }

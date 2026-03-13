@@ -18,6 +18,7 @@
     # You can also split up your configuration and import pieces of it here:
     ./applications/firefox.nix
     ./desktop/niri
+    ./development
   ];
 
   nixpkgs = {
@@ -85,6 +86,11 @@
     strace # system call monitoring
     ltrace # library call monitoring
     lsof # list open files
+
+    libnotify
+    alsa-utils
+    alsa-firmware
+    brightnessctl
   ];
 
   # basic configuration of git, please change to your own

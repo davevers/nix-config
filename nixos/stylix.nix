@@ -1,6 +1,5 @@
 {
   pkgs,
-  self,
   ...
 }:
 
@@ -8,8 +7,13 @@
   stylix = {
     enable = true;
     autoEnable = true;
-    base16Scheme = "${pkgs.base16-schemes}/share/themes/kanagawa.yaml";
+    base16Scheme = "${pkgs.base16-schemes}/share/themes/everforest-dark-hard.yaml";
     polarity = "dark";
+
+    opacity = {
+      applications = 0.9;
+      terminal = 0.9;
+    };
 
     cursor = {
       package = pkgs.bibata-cursors;
@@ -30,12 +34,12 @@
         package = pkgs.noto-fonts;
         name = "Noto Serif";
       };
-      
+
       sizes = {
         applications = 12;
-        desktop = 10;
+        desktop = 12;
         terminal = 15;
-        popups = 10;
+        popups = 15;
       };
     };
   };

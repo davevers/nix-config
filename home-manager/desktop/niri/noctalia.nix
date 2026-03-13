@@ -2,7 +2,8 @@
   inputs,
   config,
   ...
-}: {
+}:
+{
   imports = [
     inputs.noctalia.homeModules.default
   ];
@@ -12,43 +13,42 @@
 
     settings = {
       bar = {
-        density = "default";
+        density = "compact";
         position = "top";
-        barType = "simple";
+        floating = false;
         showCapsule = true;
+        useSeparateOpacity = false;
+        showOutline = false;
+        outerCorners = false;
         widgets = {
           left = [
             {
-              id = "Launcher";
+              id = "SystemMonitor";
+              compactMode = false;
             }
             {
-              id = "Workspace";
-              hideUnoccupied = false;
-              labelMode = "index";
-            }
-            {
-              id = "ActiveWindow";
+              id = "MediaMini";
             }
           ];
           center = [
             {
-              id = "Clock";
-              formatHorizontal = "HH:mm ddd, MMM dd";
-              formatVertical = "HH mm";
-              useMonospacedFont = true;
-              usePrimaryColor = false;
-            }
-            {
-              id = "MediaMini";
+              id = "Workspace";
+              hideUnoccupied = false;
+              labelMode = "none";
             }
           ];
           right = [
             {
               id = "Tray";
             }
-
             {
               id = "NotificationHistory";
+            }
+            {
+              id = "Network";
+            }
+            {
+              id = "Bluetooth";
             }
             {
               id = "Volume";
@@ -57,25 +57,52 @@
               id = "Battery";
             }
             {
+              id = "Clock";
+              formatHorizontal = "HH:mm dd MMM";
+              formatVertical = "HH mm";
+              useMonospacedFont = true;
+              usePrimaryColor = false;
+            }
+            {
               id = "ControlCenter";
               useDistroLogo = true;
-              icon = "noctalia"; # used when distro logo is set to false
               enableColorization = true;
             }
           ];
         };
       };
 
+      appLauncher = {
+        enableClipboardHistory = true;
+        autoPasteClipboard = false;
+        position = "center";
+        terminalCommand = "kitty";
+        density = "compact";
+        showCategories = false;
+      };
+
+      dock = {
+        enabled = false;
+        };
+
       general = {
+        animationSpeed = 1.5;
+        compactLockScreen = true;
+        lockScreenBlur = 0.8;
+        enableShadows = true;
         avatarImage = "/home/${config.home.username}/.face";
       };
 
-      colorSchemes.predefinedScheme = "Catppuccin-Lavender";
+      ui = {
+        panelsAttachedToBar = true;
+        settingsPanelMode = "centered";
+      };
 
       location = {
         analogClockInCalendar = "true";
         name = "Rotterdam, NL";
-        useFahrenheit = true;
+        useFahrenheit = false;
+        weatherShowEffects = false;
       };
     };
     # this may also be a string or a path to a JSON file.
