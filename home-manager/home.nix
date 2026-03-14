@@ -64,6 +64,8 @@
     btop
     neovim
     obsidian
+    seahorse
+    just
 
     # archives
     zip

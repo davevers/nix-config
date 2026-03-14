@@ -15,7 +15,7 @@
       bar = {
         density = "compact";
         position = "top";
-        floating = false;
+        floating = true;
         showCapsule = true;
         useSeparateOpacity = false;
         showOutline = false;
@@ -111,27 +111,27 @@
           {
             enabled = true;
             action = "suspend";
-            keybind = "s";
+            keybind = "S";
           }
           {
             enabled = true;
             action = "hibernate";
-            keybind = "h";
+            keybind = "H";
           }
           {
             enabled = true;
             action = "reboot";
-            keybind = "r";
+            keybind = "R";
           }
           {
             enabled = true;
             action = "logout";
-            keybind = "l";
+            keybind = "L";
           }
           {
             enabled = true;
             action = "shutdown";
-            keybind = "p";
+            keybind = "P";
           }
         ];
       };
