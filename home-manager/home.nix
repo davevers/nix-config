@@ -17,9 +17,10 @@
     # inputs.nix-colors.homeManagerModules.default
 
     # You can also split up your configuration and import pieces of it here:
-    ./applications/firefox.nix
+    ./applications
     ./desktop/niri
     ./development
+    inputs.spicetify-nix.homeManagerModules.spicetify
   ];
 
   nixpkgs = {
@@ -63,8 +64,6 @@
     yazi
     btop
     neovim
-    obsidian
-    seahorse
     just
 
     # archives
@@ -119,6 +118,10 @@
     enable = true;
     gitCredentialHelper.enable = true;
   };
+
+  fonts.fontconfig = {
+      enable = true;
+    };
 
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";
