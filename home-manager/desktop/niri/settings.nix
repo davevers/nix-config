@@ -47,8 +47,8 @@
           scroll-factor = 1.0;
           scroll-method = "no-scroll";
         };
-        tablet= {
-            map-to-output = "DP-3";
+        tablet = {
+          map-to-output = "DP-3";
         };
 
         # warp-mouse-to-focus
@@ -56,28 +56,27 @@
         workspace-auto-back-and-forth = true;
       };
 
-
       gestures.hot-corners.enable = false;
 
       layout = {
         gaps = 12;
         center-focused-column = "never";
         preset-column-widths = [
-            { proportion = 1. / 3.; }
-            { proportion = 1. / 2.; }
-            { proportion = 2. / 3.; }
+          { proportion = 1. / 3.; }
+          { proportion = 1. / 2.; }
+          { proportion = 2. / 3.; }
         ];
         default-column-width.proportion = 0.5;
         always-center-single-column = true;
-    	border = {
+        border = {
           enable = true;
           # set to stylix foregrond color
           active.color = config.lib.stylix.colors.withHashtag.base05;
-	  width = 2;
-	};
-	focus-ring = {
-	  enable = false;
-	};
+          width = 2;
+        };
+        focus-ring = {
+          enable = false;
+        };
       };
 
       hotkey-overlay.skip-at-startup = true;
@@ -111,6 +110,15 @@
             bottom-right = 12.0;
           };
           clip-to-geometry = true;
+        }
+      ];
+
+      layer-rules = [
+        {
+          matches = [
+            { namespace = "^noctalia-overview*"; }
+          ];
+          place-within-backdrop = true;
         }
       ];
     };

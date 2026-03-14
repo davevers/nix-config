@@ -28,16 +28,8 @@ in
     "XF86AudioNext".action.spawn = noctalia "media next";
     "XF86AudioPrev".action.spawn = noctalia "media previous";
 
-    "XF86MonBrightnessUp".action.spawn = [
-      "brightnessctl"
-      "set"
-      "+5%"
-    ];
-    "XF86MonBrightnessDown".action.spawn = [
-      "brightnessctl"
-      "set"
-      "5%-"
-    ];
+    "XF86MonBrightnessUp".action.spawn = noctalia "brightness increase";
+    "XF86MonBrightnessDown".action.spawn = noctalia "brightness decrease";
 
     "super+Alt+L".action.spawn = noctalia "lockScreen lock";
     "super+Alt+P".action.spawn = noctalia "sessionMenu toggle";
@@ -50,7 +42,7 @@ in
       repeat = false;
     };
 
-    "super+Space".action.spawn = noctalia "launcher toggle";
+    "super+Space".action.spawn = "fuzzel";
 
     "Mod+Q" = {
       action = close-window;

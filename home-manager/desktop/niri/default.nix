@@ -1,5 +1,6 @@
 {
   inputs,
+  pkgs,
   ...
 }:
 
@@ -11,7 +12,11 @@
     ./settings.nix # Your custom configuration files for Niri
     ./keybinds.nix
     ./outputs.nix
-    ./common.nix
-    ./noctalia.nix
+    ../common
+  ];
+
+  home.packages = with pkgs; [
+    xwayland-satellite
+    wl-clipboard
   ];
 }

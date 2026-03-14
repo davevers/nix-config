@@ -6,7 +6,8 @@
   config,
   pkgs,
   ...
-}: {
+}:
+{
   # You can import other home-manager modules here
   imports = [
     # If you want to use modules your own flake exports (from modules/home-manager):
@@ -52,12 +53,17 @@
     homeDirectory = "/home/dave";
   };
 
+  home.sessionVariables = {
+    EDITOR = "nvim";
+    TERMINAL = "kitty";
+  };
+
   home.packages = with pkgs; [
     fastfetch
     yazi
     btop
     neovim
-    gh
+    obsidian
 
     # archives
     zip
@@ -73,14 +79,13 @@
     fzf # A command-line fuzzy finder
 
     # networking tools
-    dnsutils  # `dig` + `nslookup`
+    dnsutils # `dig` + `nslookup`
 
     # nix related
     #
     # it provides the command `nom` works just like `nix`
     # with more details log output
     nix-output-monitor
-
 
     # system call monitoring
     strace # system call monitoring
@@ -108,8 +113,9 @@
     enable = true;
   };
 
-  programs.obsidian = {
+  programs.gh = {
     enable = true;
+    gitCredentialHelper.enable = true;
   };
 
   # Nicely reload system units when changing configs

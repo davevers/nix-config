@@ -20,29 +20,31 @@
         useSeparateOpacity = false;
         showOutline = false;
         outerCorners = false;
+        marginHorizontal = 8;
+        marginVertical = 8;
+        contentPadding = 6;
         widgets = {
           left = [
-            {
-              id = "SystemMonitor";
-              compactMode = false;
-            }
-            {
-              id = "MediaMini";
-            }
-          ];
-          center = [
             {
               id = "Workspace";
               hideUnoccupied = false;
               labelMode = "none";
             }
           ];
-          right = [
+          center = [
             {
-              id = "Tray";
+              id = "Clock";
             }
             {
               id = "NotificationHistory";
+            }
+            {
+              id = "MediaMini";
+            }
+          ];
+          right = [
+            {
+              id = "Tray";
             }
             {
               id = "Network";
@@ -54,14 +56,12 @@
               id = "Volume";
             }
             {
-              id = "Battery";
+              id = "SystemMonitor";
             }
             {
-              id = "Clock";
-              formatHorizontal = "HH:mm dd MMM";
-              formatVertical = "HH mm";
-              useMonospacedFont = true;
-              usePrimaryColor = false;
+              id = "Battery";
+              showNoctaliaPerformance = true;
+              showPowerProfiles = true;
             }
             {
               id = "ControlCenter";
@@ -83,7 +83,7 @@
 
       dock = {
         enabled = false;
-        };
+      };
 
       general = {
         animationSpeed = 1.5;
@@ -104,7 +104,49 @@
         useFahrenheit = false;
         weatherShowEffects = false;
       };
+
+      sessionMenu = {
+        largeButtonsStyle = false;
+        powerOptions = [
+          {
+            enabled = true;
+            action = "suspend";
+            keybind = "s";
+          }
+          {
+            enabled = true;
+            action = "hibernate";
+            keybind = "h";
+          }
+          {
+            enabled = true;
+            action = "reboot";
+            keybind = "r";
+          }
+          {
+            enabled = true;
+            action = "logout";
+            keybind = "l";
+          }
+          {
+            enabled = true;
+            action = "shutdown";
+            keybind = "p";
+          }
+        ];
+      };
+
+      idle = {
+        enabled = true;
+        lockTimeout = 180;
+        screenOffTimeout = 300;
+        suspendTimeout = 900;
+      };
+
+      wallpaper = {
+        enabled = true;
+        overviewEnabled = true;
+      };
     };
-    # this may also be a string or a path to a JSON file.
   };
 }
