@@ -6,7 +6,8 @@
   config,
   pkgs,
   ...
-}: {
+}:
+{
   # You can import other NixOS modules here
   imports = [
     # If you want to use modules your own flake exports (from modules/nixos):
@@ -49,32 +50,33 @@
     };
   };
 
-  nix = let
-    flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
-  in {
-    settings = {
-      # Enable flakes and new 'nix' command
-      experimental-features = "nix-command flakes";
-      # Opinionated: disable global registry
-      flake-registry = "";
-      # Workaround for https://github.com/NixOS/nix/issues/9574
-      nix-path = config.nix.nixPath;
+  nix =
+    let
+      flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
+    in
+    {
+      settings = {
+        # Enable flakes and new 'nix' command
+        experimental-features = "nix-command flakes";
+        # Opinionated: disable global registry
+        flake-registry = "";
+        # Workaround for https://github.com/NixOS/nix/issues/9574
+        nix-path = config.nix.nixPath;
+      };
+      # Opinionated: disable channels
+      channel.enable = false;
+
+      # Opinionated: make flake registry and nix path match flake inputs
+      registry = lib.mapAttrs (_: flake: { inherit flake; }) flakeInputs;
+      nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
+
+      # Enable garbage collection
+      gc = {
+        automatic = true;
+        dates = "weekly";
+        options = "--delete-older-than 7d";
+      };
     };
-    # Opinionated: disable channels
-    channel.enable = false;
-
-    # Opinionated: make flake registry and nix path match flake inputs
-    registry = lib.mapAttrs (_: flake: {inherit flake;}) flakeInputs;
-    nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
-
-    # Enable garbage collection
-    gc = {
-      automatic = true;
-      dates = "weekly";
-      options = "--delete-older-than 7d";
-    };
-  };
-
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -85,7 +87,8 @@
     options snd-intel-dspcfg dsp_driver=1
   '';
 
-  boot.initrd.luks.devices."luks-4d3dca95-cccf-48da-b970-cae48ccecfd9".device = "/dev/disk/by-uuid/4d3dca95-cccf-48da-b970-cae48ccecfd9";
+  boot.initrd.luks.devices."luks-4d3dca95-cccf-48da-b970-cae48ccecfd9".device =
+    "/dev/disk/by-uuid/4d3dca95-cccf-48da-b970-cae48ccecfd9";
 
   networking.hostName = "yoga-laptop"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -126,15 +129,27 @@
   services.greetd = {
     enable = true;
     settings = {
-      default_session = {
-        #command = "${pkgs.tuigreet}/bin/tuigreet --remember  --asterisks  --container-padding 2 --no-xsession-wrapper --cmd niri-session";
-        #user = "greeter";
+      initial_session = {
         # Starts niri session logged in automatically without prompt
         command = "niri-session";
         user = "dave";
       };
+      default_session = {
+        command = "${pkgs.tuigreet}/bin/tuigreet --remember  --asterisks  --container-padding 2 --no-xsession-wrapper --cmd niri-session";
+      };
     };
   };
+
+  security.pam.services.login.enableGnomeKeyring = true;
+  security.pam.services.greetd.text = ''
+    auth      substack      login
+    account   include       login
+    password  substack      login
+    session   optional      ${pkgs.unstable.pam_fde_boot_pw}/lib/security/pam_fde_boot_pw.so inject_for=gkr
+    session   include       login
+  '';
+  boot.initrd.systemd.enable = true;
+  services.gnome.gnome-keyring.enable = true;
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -155,10 +170,23 @@
   users.users = {
     dave = {
       isNormalUser = true;
+      shell = pkgs.fish;
       openssh.authorizedKeys.keys = [
         # TODO: Add your SSH public key(s) here, if you plan on using SSH to connect
       ];
-      extraGroups = ["networkmanager" "wheel"];
+      extraGroups = [
+        "networkmanager"
+        "wheel"
+      ];
+    };
+  };
+
+  programs.fish = {
+    enable = true;
+    vendor = {
+      completions.enable = true;
+      config.enable = true;
+      functions.enable = true;
     };
   };
 
@@ -169,8 +197,6 @@
   ];
 
   environment.variables.EDITOR = "vim";
-
-  programs.niri.enable = true;
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   system.stateVersion = "25.11";
