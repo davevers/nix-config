@@ -3,15 +3,15 @@
   ...
 }:
 {
+  home.packages = with pkgs; [
+    fishPlugins.pure
+    fishPlugins.sponge
+    fishPlugins.fzf
+  ];
   programs.fish = {
     enable = true;
-    plugins = with pkgs; [
-      fishPlugins.pure
-      fishPlugins.sponge
-      fishPlugins.fzf
-    ];
     interactiveShellInit = ''
-      set fish_greeting
+      set fish_greeting # Disable greeting
     '';
   };
 }
