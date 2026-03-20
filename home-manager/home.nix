@@ -20,6 +20,7 @@
     ./applications
     ./desktop/niri
     ./development
+    ./shell
     inputs.spicetify-nix.homeManagerModules.spicetify
   ];
 
@@ -110,18 +111,14 @@
     enable = true;
   };
 
-  programs.fish = {
-    enable = true;
-  };
-
   programs.gh = {
     enable = true;
     gitCredentialHelper.enable = true;
   };
 
   fonts.fontconfig = {
-      enable = true;
-    };
+    enable = true;
+  };
 
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";
