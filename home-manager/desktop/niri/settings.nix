@@ -1,7 +1,6 @@
 {
   pkgs,
   config,
-  inputs,
   ...
 }:
 
@@ -25,7 +24,6 @@
           repeat-rate = 40;
           xkb = {
             layout = "us";
-            variant = "intl";
             options = "compose:ralt,caps:ctrl_modifier,caps:escape_shifted_capslock";
           };
         };
@@ -84,43 +82,6 @@
       prefer-no-csd = true;
 
       screenshot-path = "~/Pictures/Screenshots/Screenshot_%Y-%m-%d %H-%M-%S.png";
-
-      window-rules = [
-        {
-          matches = [
-            {
-              app-id = "firefox$";
-              title = "^Picture-in-Picture$";
-            }
-          ];
-          open-floating = true;
-        }
-        {
-          matches = [
-            { app-id = "^org\\.keepassxc\\.KeePassXC$"; }
-            { app-id = "^org\\.gnome\\.World\\.Secrets$"; }
-          ];
-          block-out-from = "screen-capture";
-        }
-        {
-          geometry-corner-radius = {
-            top-left = 12.0;
-            top-right = 12.0;
-            bottom-left = 12.0;
-            bottom-right = 12.0;
-          };
-          clip-to-geometry = true;
-        }
-      ];
-
-      layer-rules = [
-        {
-          matches = [
-            { namespace = "^noctalia-overview*"; }
-          ];
-          place-within-backdrop = true;
-        }
-      ];
     };
   };
 }

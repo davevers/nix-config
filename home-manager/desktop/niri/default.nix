@@ -12,6 +12,7 @@
     ./settings.nix # Your custom configuration files for Niri
     ./keybinds.nix
     ./outputs.nix
+    ./rules.nix
     ../common
   ];
 
