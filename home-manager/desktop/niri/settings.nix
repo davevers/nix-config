@@ -68,8 +68,6 @@
         always-center-single-column = true;
         border = {
           enable = true;
-          # set to stylix foregrond color
-          active.color = config.lib.stylix.colors.withHashtag.base05;
           width = 2;
         };
         focus-ring = {
