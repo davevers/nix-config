@@ -7,7 +7,7 @@
   stylix = {
     enable = true;
     autoEnable = true;
-    base16Scheme = "${pkgs.base16-schemes}/share/themes/kanagawa.yaml";
+    base16Scheme = "${pkgs.base16-schemes}/share/themes/everforest-dark-hard.yaml";
     polarity = "dark";
 
     opacity = {
@@ -24,8 +24,8 @@
 
     fonts = {
       monospace = {
-        package = pkgs.nerd-fonts.lilex;
-        name = "Lilex Nerd Font Mono";
+        package = pkgs.lilex;
+        name = "Lilex";
       };
       sansSerif = {
         package = pkgs.adwaita-fonts;

@@ -60,6 +60,8 @@
     TERMINAL = "kitty";
   };
 
+  # fonts.fontconfig.enable = true;
+
   home.packages = with pkgs; [
     fastfetch
     yazi
@@ -98,6 +100,8 @@
     alsa-utils
     alsa-firmware
     brightnessctl
+
+    # nerd-fonts.symbols-only
   ];
 
   # basic configuration of git, please change to your own

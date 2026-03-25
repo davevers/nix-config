@@ -79,16 +79,20 @@
     };
 
   # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.systemd-boot.configurationLimit = 10;
-  boot.extraModprobeConfig = ''
-    options snd-hda-intel dmic_detect=0
-    options snd-intel-dspcfg dsp_driver=1
-  '';
-
-  boot.initrd.luks.devices."luks-4d3dca95-cccf-48da-b970-cae48ccecfd9".device =
-    "/dev/disk/by-uuid/4d3dca95-cccf-48da-b970-cae48ccecfd9";
+  boot = {
+    loader = {
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
+      systemd-boot.configurationLimit = 10;
+    };
+    extraModprobeConfig = ''
+      options snd-hda-intel dmic_detect=0
+      options snd-intel-dspcfg dsp_driver=1
+    '';
+    initrd.luks.devices."luks-4d3dca95-cccf-48da-b970-cae48ccecfd9".device =
+      "/dev/disk/by-uuid/4d3dca95-cccf-48da-b970-cae48ccecfd9";
+    plymouth.enable = true;
+  };
 
   networking.hostName = "yoga-laptop"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
