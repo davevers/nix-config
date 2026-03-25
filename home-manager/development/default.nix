@@ -6,5 +6,6 @@
 {
   imports = [
     ./languages.nix
+    ./vscode.nix
   ];
 }
