@@ -1,17 +1,28 @@
-# This is your system's configuration file.
-# Use this to configure your system environment (it replaces /etc/nixos/configuration.nix)
+{ self, inputs, ... }:
 {
-  self,
-  ...
-}:
-{
+  flake.nixosConfigurations.loki = inputs.nixpkgs.lib.nixosSystem {
+    modules = [
+      self.modules.nixos.loki
+    ];
+  };
+
   flake.modules.nixos.loki = {
     imports = with self.modules.nixos; [
-      system-common
-      dave
-      shell
+      system-default
       stylix
+      greetd
+      dave
     ];
+
+    home-manager.users.dave = {
+      imports = with self.modules.homeManager; [
+        niri
+        common-applications
+        vscode
+        neovim
+      ];
+    };
+
     networking.hostName = "loki";
     boot = {
       extraModprobeConfig = ''

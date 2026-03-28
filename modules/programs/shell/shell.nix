@@ -8,6 +8,11 @@
         vim
         curl
         wget
+
+        libnotify
+        alsa-utils
+        alsa-firmware
+        brightnessctl
       ];
       programs.fish = {
         enable = true;
@@ -18,6 +23,7 @@
         };
       };
     };
+    
   flake.modules.homeManager.shell =
     { pkgs, ... }:
     {
@@ -25,6 +31,8 @@
         fishPlugins.pure
         fishPlugins.sponge
         fishPlugins.fzf
+
+        fastfetch
       ];
 
       programs.fish = {
@@ -55,6 +63,10 @@
       };
 
       programs.fd = {
+        enable = true;
+      };
+
+      programs.yazi = {
         enable = true;
       };
     };

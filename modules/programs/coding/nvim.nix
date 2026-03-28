@@ -1,5 +1,5 @@
 {
-  flake.modules.homeManager.coding =
+  flake.modules.homeManager.neovim =
     { pkgs, ... }:
     {
       home.packages = with pkgs; [

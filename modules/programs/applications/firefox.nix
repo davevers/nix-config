@@ -3,7 +3,7 @@
   ...
 }:
 {
-  flake.modules.homeManager.applications =
+  flake.modules.homeManager.firefox =
     {
       config,
       pkgs,

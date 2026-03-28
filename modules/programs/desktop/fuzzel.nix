@@ -1,5 +1,5 @@
 {
-  flake.modules.homeManager.desktop-niri =
+  flake.modules.homeManager.fuzzel =
     { config, ... }:
     {
       programs.fuzzel = {

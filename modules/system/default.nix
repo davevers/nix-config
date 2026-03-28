@@ -4,13 +4,12 @@
   ...
 }:
 {
-  flake.modules.nixos.system-common =
+  flake.modules.nixos.system-default =
     { pkgs, ... }:
     {
       imports = with self.modules.nixos; [
         services
         locale
-        greetd
       ];
       nixpkgs = {
         overlays = [
@@ -56,6 +55,26 @@
       };
 
       environment.variables.EDITOR = "vim";
-    };
 
+      environment.systemPackages = with pkgs; [
+        git
+        vim
+        curl
+        wget
+
+        libnotify
+        alsa-utils
+        alsa-firmware
+        brightnessctl
+      ];
+
+      programs.fish = {
+        enable = true;
+        vendor = {
+          completions.enable = true;
+          config.enable = true;
+          functions.enable = true;
+        };
+      };
+    };
 }

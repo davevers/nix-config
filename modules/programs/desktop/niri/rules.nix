@@ -1,5 +1,5 @@
 {
-  flake.modules.homeManager.desktop-niri = {
+  flake.modules.homeManager.niri = {
     programs.niri.settings = {
 
       window-rules = [

@@ -1,6 +1,5 @@
 {
-  flake.modules.homeManager.coding =
-
+  flake.modules.homeManager.programming =
     { pkgs, ... }:
     {
       home.packages = with pkgs; [

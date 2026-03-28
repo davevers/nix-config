@@ -4,7 +4,7 @@
 }:
 
 {
-  flake.modules.homeManager.desktop-niri =
+  flake.modules.homeManager.noctalia =
     {
       config,
       ...
@@ -19,16 +19,16 @@
 
         settings = {
           bar = {
-            density = "compact";
-            position = "top";
-            floating = true;
+            density = "default";
+            position = "left";
+            floating = false;
             showCapsule = true;
             useSeparateOpacity = false;
             showOutline = false;
-            outerCorners = false;
+            outerCorners = true;
             marginHorizontal = 8;
             marginVertical = 8;
-            contentPadding = 6;
+            contentPadding = 8;
             widgets = {
               left = [
                 {
