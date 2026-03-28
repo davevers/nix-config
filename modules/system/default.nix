@@ -62,10 +62,6 @@
         curl
         wget
 
-        libnotify
-        alsa-utils
-        alsa-firmware
-        brightnessctl
       ];
 
       programs.fish = {
