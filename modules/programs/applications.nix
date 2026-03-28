@@ -1,7 +1,15 @@
 {
-  flake.modules.home-manager.applications =
+  inputs,
+  ...
+}:
+{
+  flake.modules.homeManager.applications =
     { pkgs, ... }:
     {
+      imports = [
+        inputs.spicetify-nix.homeManagerModules.spicetify
+      ];
+
       home.packages = with pkgs; [
         proton-pass
         protonmail-desktop

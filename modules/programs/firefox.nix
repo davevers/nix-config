@@ -181,9 +181,9 @@
           };
         };
       };
-      # stylix.targets.firefox = {
-      #   profileNames = [ "${config.home.username}" ];
-      #   colorTheme.enable = true;
-      # };
+      stylix.targets.firefox = {
+        profileNames = [ "${config.home.username}" ];
+        colorTheme.enable = true;
+      };
     };
 }

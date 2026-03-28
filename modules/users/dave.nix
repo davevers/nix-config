@@ -16,6 +16,7 @@
           "networkmanager"
           "wheel"
         ];
+        shell = pkgs.fish;
       };
       imports = [
         inputs.home-manager.nixosModules.default
@@ -27,6 +28,7 @@
           applications
           shell
           git
+          coding
         ];
       };
     };

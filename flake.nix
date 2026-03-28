@@ -35,6 +35,13 @@
       url = "github:noctalia-dev/noctalia-qs";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    stylix = {
+      url = "github:nix-community/stylix/release-25.11";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    spicetify-nix.url = "github:Gerg-L/spicetify-nix";
   };
 
   outputs =

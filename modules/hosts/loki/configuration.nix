@@ -9,6 +9,8 @@
     imports = with self.modules.nixos; [
       system-common
       dave
+      shell
+      stylix
     ];
     networking.hostName = "loki";
     boot = {

@@ -9,6 +9,14 @@
         curl
         wget
       ];
+      programs.fish = {
+        enable = true;
+        vendor = {
+          completions.enable = true;
+          config.enable = true;
+          functions.enable = true;
+        };
+      };
     };
   flake.modules.homeManager.shell =
     { pkgs, ... }:
