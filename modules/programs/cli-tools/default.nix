@@ -1,46 +1,33 @@
 {
+  self,
+  ...
+}:
+{
 
-  flake.modules.nixos.shell =
+  flake.modules.nixos.cli-tools =
     { pkgs, ... }:
     {
+      imports = with self.modules.nixos; [
+        shell
+      ];
+      home-manager.sharedModules = [
+        self.modules.homeManager.cli-tools
+      ];
+
       environment.systemPackages = with pkgs; [
         git
         vim
         curl
         wget
-
-        libnotify
-        alsa-utils
-        alsa-firmware
-        brightnessctl
       ];
-      programs.fish = {
-        enable = true;
-        vendor = {
-          completions.enable = true;
-          config.enable = true;
-          functions.enable = true;
-        };
-      };
     };
-    
-  flake.modules.homeManager.shell =
+
+  flake.modules.homeManager.cli-tools =
     { pkgs, ... }:
     {
       home.packages = with pkgs; [
-        fishPlugins.pure
-        fishPlugins.sponge
-        fishPlugins.fzf
-
         fastfetch
       ];
-
-      programs.fish = {
-        enable = true;
-        interactiveShellInit = ''
-          set fish_greeting # Disable greeting
-        '';
-      };
 
       programs.zoxide = {
         enable = true;

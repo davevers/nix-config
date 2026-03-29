@@ -9,7 +9,6 @@
   flake.modules.nixos.loki = {
     imports = with self.modules.nixos; [
       system-default
-      stylix
       greetd
       dave
     ];

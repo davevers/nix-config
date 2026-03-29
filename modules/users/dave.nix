@@ -9,7 +9,9 @@
     {
       imports = [
         inputs.home-manager.nixosModules.default
+        self.modules.nixos.cli-tools
       ];
+
       home-manager.users.dave = {
         imports = with self.modules.homeManager; [
           dave
@@ -36,7 +38,6 @@
     {
       imports = with self.modules.homeManager; [
         user-default
-        shell
         git
         programming
       ];

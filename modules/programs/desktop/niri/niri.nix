@@ -23,6 +23,8 @@
         xwayland-satellite
         wl-clipboard
 
+        nautilus
+
         libnotify
         alsa-utils
         alsa-firmware

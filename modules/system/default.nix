@@ -10,6 +10,7 @@
       imports = with self.modules.nixos; [
         services
         locale
+        stylix
       ];
       nixpkgs = {
         overlays = [
@@ -52,25 +53,6 @@
           systemd-boot.configurationLimit = 10;
         };
         plymouth.enable = true;
-      };
-
-      environment.variables.EDITOR = "vim";
-
-      environment.systemPackages = with pkgs; [
-        git
-        vim
-        curl
-        wget
-
-      ];
-
-      programs.fish = {
-        enable = true;
-        vendor = {
-          completions.enable = true;
-          config.enable = true;
-          functions.enable = true;
-        };
       };
     };
 }
