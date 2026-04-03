@@ -9,6 +9,7 @@
     {
       imports = with self.modules.nixos; [
         shell
+        neovim
       ];
       home-manager.sharedModules = [
         self.modules.homeManager.cli-tools

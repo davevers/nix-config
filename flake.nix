@@ -42,6 +42,8 @@
     };
 
     spicetify-nix.url = "github:Gerg-L/spicetify-nix";
+
+    mnw.url = "github:Gerg-L/mnw";
   };
 
   outputs =

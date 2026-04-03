@@ -18,7 +18,6 @@
         niri
         common-applications
         vscode
-        neovim
       ];
     };
 
