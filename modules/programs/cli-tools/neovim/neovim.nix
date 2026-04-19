@@ -24,9 +24,18 @@
         luaFiles = [
           ./nvim/init.lua
         ];
+        extraBinPath = with pkgs; [
+          lua-language-server
+          stylua
+        ];
         plugins = {
-          opt = with pkgs.unstable.vimPlugins; [
+          start = with pkgs.unstable.vimPlugins; [
             mini-nvim
+            pkgs.vimPlugins.nvim-treesitter.withAllGrammars
+            nvim-lspconfig
+            conform-nvim
+            friendly-snippets
+            everforest
           ];
           dev.myconfig = {
             pure = ./nvim;

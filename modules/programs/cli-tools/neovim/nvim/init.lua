@@ -1,8 +1,3 @@
--- WARNING: NEOVIM 0.12 IS STILL UNDER DEVELOPMENT AND NOT YET STABLE.
--- BE SURE YOU ARE COMFORTABLE WITH KEEPING UP TO DATE DEVELOPMENT VERSION.
--- THIS CONFIG IS VERIFIED FOR AT LEAST VERSION `v0.12.0-dev-2260+g6b4ec2264e`.
--- WHEN IN DOUBT - UPDATE TO THE LATEST DEVELOPMENT VERSION.
-
 -- ┌────────────────────┐
 -- │ Welcome to MiniMax │
 -- └────────────────────┘
@@ -73,8 +68,7 @@ _G.Config = {}
 -- 'mini.nvim' - all-in-one plugin powering most MiniMax features.
 -- See 'plugin/30_mini.lua' for how it is used.
 -- Load now to have 'mini.misc' available for custom loading helpers.
-vim.cmd('packadd mini.nvim')
-vim.cmd('echo "Installed `mini.nvim`" | redraw')
+-- vim.cmd('packadd mini.nvim')
 
 -- Loading helpers used to organize config into fail-safe parts. Example usage:
 -- - `now` - execute immediately. Use for what must be executed during startup.
