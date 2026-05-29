@@ -11,11 +11,11 @@
       system-default
       greetd
       dave
+      desktop
     ];
 
     home-manager.users.dave = {
       imports = with self.modules.homeManager; [
-        niri
         common-applications
         vscode
       ];

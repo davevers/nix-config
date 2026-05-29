@@ -6,19 +6,13 @@
 {
   perSystem =
     { pkgs, system, ... }:
-    {
-      _module.args.pkgs = import inputs.nixpkgs {
+    let
+      unstable = import inputs.nixpkgs-unstable {
         inherit system;
-        overlays = [
-          (final: _prev: {
-            unstable = import inputs.nixpkgs-unstable {
-              system = final.system;
-              config.allowUnfree = true;
-            };
-          })
-        ];
         config = { };
       };
+    in
+    {
       packages.myNeovim = inputs.mnw.lib.wrap pkgs {
         neovim = pkgs.unstable.neovim-unwrapped;
         luaFiles = [
