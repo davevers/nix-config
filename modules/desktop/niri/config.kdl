@@ -1,0 +1,162 @@
+input {
+    keyboard {
+        track-layout "global"
+        repeat-delay 500
+        repeat-rate 40
+        xkb {
+            layout "us"
+            variant "intl"
+            options "compose:ralt,caps:ctrl_modifier,caps:escape_shifted_capslock"
+        }
+    }
+  touchpad {
+    tap
+    // dwt
+    natural-scroll
+    accel-speed 0.5
+    accel-profile "adaptive"
+    scroll-factor 1.2
+    scroll-method "two-finger"
+    tap-button-map "left-right-middle"
+    click-method "clickfinger"
+    // disabled-on-external-mouse
+    // middle-emulation
+  }
+  mouse {
+    // natural-scroll
+    accel-speed 0.2
+    accel-profile "flat"
+    scroll-factor 1.0
+    scroll-method "no-scroll"
+  }
+	tablet {
+		map-to-output "DP-3"
+	}
+
+  // warp-mouse-to-focus
+  // focus-follows-mouse max-scroll-amount="0%"
+  workspace-auto-back-and-forth
+}
+
+gestures {
+    hot-corners {
+        off
+    }
+}
+
+environment {
+    XDG_CURRENT_DESKTOP "niri"
+    QT_QPA_PLATFORM "wayland"
+    ELECTRON_OZONE_PLATFORM_HINT "auto"
+    QT_QPA_PLATFORMTHEME "gtk3"
+    QT_QPA_PLATFORMTHEME_QT6 "gtk3"
+}
+
+cursor {
+    xcursor-theme "Bibata-Modern-Classic"
+    xcursor-size 24
+}
+
+layout {
+    gaps 12
+    center-focused-column "never"
+    preset-column-widths {
+        proportion 0.33333
+        proportion 0.5
+        proportion 0.66667
+    }
+    default-column-width { proportion 0.5; }
+    always-center-single-column
+    background-color "transparent"
+
+    border {
+        on
+        width 2
+        active-color   "#ffffff"
+        inactive-color "#919191"
+        urgent-color   "#ffb4ab"
+    }
+
+    focus-ring {
+        off
+    }
+
+    shadow {
+        on
+        color "#00000070"
+        softness 30
+        spread 5
+        offset x=0 y=5
+        draw-behind-window true
+    }
+
+    tab-indicator {
+        active-color   "#ffffff"
+        inactive-color "#919191"
+        urgent-color   "#ffb4ab"
+    }
+
+    insert-hint {
+        color "#ffffff80"
+    }
+}
+
+hotkey-overlay {
+    skip-at-startup
+}
+
+prefer-no-csd
+
+screenshot-path "~/Pictures/Screenshots/Screenshot_%Y-%m-%d %H-%M-%S.png"
+
+animations {
+    // slowdown 3.0
+}
+
+// Open the Firefox picture-in-picture player as floating by default.
+window-rule {
+    match app-id=r#"firefox$"# title="^Picture-in-Picture$"
+    open-floating true
+}
+
+// Example: block out two password managers from screen capture.
+/-window-rule {
+    match app-id=r#"^org\.keepassxc\.KeePassXC$"#
+    match app-id=r#"^org\.gnome\.World\.Secrets$"#
+
+    block-out-from "screen-capture"
+}
+
+// Example: enable rounded corners for all windows.
+// (This example rule is commented out with a "/-" in front.)
+window-rule {
+     geometry-corner-radius 12
+    clip-to-geometry true
+	  tiled-state true
+	  draw-border-with-background false
+}
+
+window-rule {
+    match app-id=r#"^org\.gnome\."#
+    draw-border-with-background false
+    geometry-corner-radius 12
+    clip-to-geometry true
+}
+
+window-rule {
+    match app-id=r#"org.quickshell$"#
+    open-floating true
+}
+
+layer-rule {
+    match namespace="^quickshell$"
+    place-within-backdrop true
+}
+
+layer-rule {
+    match namespace="dms:blurwallpaper"
+    place-within-backdrop true
+}
+
+include "keybinds.kdl"
+include "outputs.kdl"
