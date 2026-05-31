@@ -5,7 +5,7 @@
     jailed-agents.url = "github:davevers/jailed-agents";
   };
   perSystem =
-    { pkgs, ... }:
+    { pkgs, system, ... }:
     {
       devShells.default = pkgs.mkShell {
         packages = with pkgs; [

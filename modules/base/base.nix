@@ -8,17 +8,16 @@
     nixos =
       { pkgs, ... }:
       {
-            nix = {
-      settings = {
-        experimental-features = "nix-command flakes";
-      };
-      # Enable garbage collection
-      gc = {
-        automatic = true;
-        dates = "weekly";
-        options = "--delete-older-than 7d";
-      };
-    };
+        nix = {
+          settings = {
+            experimental-features = "nix-command flakes";
+          };
+          gc = {
+            automatic = true;
+            dates = "weekly";
+            options = "--delete-older-than 7d";
+          };
+        };
         boot = {
           loader = {
             systemd-boot.enable = true;
@@ -29,8 +28,6 @@
         };
 
         networking.networkmanager.enable = true;
-
-        networking.wireless.enable = true;
 
         hardware.bluetooth = {
           enable = true;

@@ -5,13 +5,6 @@
   # host aspect
   den.aspects.igloo = {
     includes = [
-      (den.batteries.unfree [
-        "broadcom-bt-firmware"
-        "b43-firmware"
-        "xone-dongle-firmware"
-        "facetimehd-calibration"
-        "facetimehd-firmware"
-      ])
       den.aspects.base
       den.aspects.desktop
       den.aspects.shell
@@ -23,6 +16,8 @@
     nixos =
       { pkgs, ... }:
       {
+        local.dms.greeterUser = "tux";
+
         virtualisation.vmVariant = {
           virtualisation = {
             graphics = true;

@@ -15,6 +15,17 @@ debug:
 update:
   nix flake update
 
+fmt:
+  nixfmt flake.nix modules/*.nix modules/*/*.nix modules/*/*/*.nix
+
+fmt-check:
+  nixfmt --check flake.nix modules/*.nix modules/*/*.nix modules/*/*/*.nix
+
+dry-run-loki:
+  nixos-rebuild dry-run --flake .#loki
+
+check: fmt-check dry-run-loki
+
 history:
   nix profile history --profile /nix/var/nix/profiles/system
 
@@ -28,4 +39,3 @@ clean:
 gc:
   # garbage collect all unused nix store entries
   sudo nix-collect-garbage --delete-old
-

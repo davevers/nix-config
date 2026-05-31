@@ -2,8 +2,7 @@
 {
   den.hosts.x86_64-linux.loki.users.dave = { };
 
-  # host aspect
-  den.aspects.loki = {
+  den.aspects.loki-firmware = {
     includes = [
       (den.batteries.unfree [
         "broadcom-bt-firmware"
@@ -12,6 +11,13 @@
         "facetimehd-calibration"
         "facetimehd-firmware"
       ])
+    ];
+  };
+
+  # host aspect
+  den.aspects.loki = {
+    includes = [
+      den.aspects.loki-firmware
       den.aspects.base
       den.aspects.desktop
       den.aspects.shell
@@ -20,6 +26,8 @@
 
     # host NixOS configuration
     nixos = {
+      local.dms.greeterUser = "dave";
+
       boot = {
         extraModprobeConfig = ''
           options snd-hda-intel dmic_detect=0
