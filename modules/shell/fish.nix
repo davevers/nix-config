@@ -24,7 +24,7 @@
 
               # Keybinds
               bind \cy accept-autosuggestion
-              
+
               # Pure
               if type -q kubectl
                 set -g pure_enable_k8s true
@@ -49,7 +49,13 @@
               #git
               abbr -a lg lazygit
 
-              zoxide init fish | source
+              if command -q nix-your-shell
+                nix-your-shell fish | source
+              end
+
+              if command -q zoxide
+                zoxide init fish | source
+              end
             '';
           };
         };

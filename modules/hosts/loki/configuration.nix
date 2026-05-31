@@ -28,6 +28,17 @@
         initrd.luks.devices."luks-4d3dca95-cccf-48da-b970-cae48ccecfd9".device =
           "/dev/disk/by-uuid/4d3dca95-cccf-48da-b970-cae48ccecfd9";
       };
+
+      nix.settings = {
+        trusted-users = [ "dave" ];
+        extra-substituters = [
+          "https://cache.nixos.org"
+          "https://cache.numtide.com"
+        ];
+        extra-trusted-public-keys = [
+          "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
+        ];
+      };
     };
   };
 }

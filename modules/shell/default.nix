@@ -1,18 +1,24 @@
 {
   den.aspects.shell =
-    { user, ... }:
+    { host, user, ... }:
     {
-      hjem =
-        { pkgs, ... }:
-        {
-          packages = with pkgs; [
-            fzf
-            zoxide
-            ripgrep
-            bat
-            eza
-            fd
-          ];
+      nixos = {
+        programs.direnv = {
+          enable = true;
         };
+      };
+  hjem =
+    { pkgs, ... }:
+    {
+      packages = with pkgs; [
+        fzf
+        zoxide
+        ripgrep
+        bat
+        eza
+        fd
+        nix-your-shell
+      ];
+    };
     };
 }
