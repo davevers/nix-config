@@ -1,6 +1,8 @@
 { den, ... }:
 {
-  den.hosts.x86_64-linux.loki.users.dave = { };
+  den.hosts.x86_64-linux.loki.users.dave = {
+    theme.base16.scheme = "everforest-dark-hard";
+  };
 
   den.aspects.loki-firmware = {
     includes = [

@@ -69,14 +69,6 @@ layout {
     always-center-single-column
     background-color "transparent"
 
-    border {
-        on
-        width 2
-        active-color   "#ffffff"
-        inactive-color "#919191"
-        urgent-color   "#ffb4ab"
-    }
-
     focus-ring {
         off
     }
@@ -88,16 +80,6 @@ layout {
         spread 5
         offset x=0 y=5
         draw-behind-window true
-    }
-
-    tab-indicator {
-        active-color   "#ffffff"
-        inactive-color "#919191"
-        urgent-color   "#ffb4ab"
-    }
-
-    insert-hint {
-        color "#ffffff80"
     }
 }
 
@@ -158,5 +140,6 @@ layer-rule {
     place-within-backdrop true
 }
 
+include "theme.kdl"
 include "keybinds.kdl"
 include "outputs.kdl"

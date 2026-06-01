@@ -41,7 +41,35 @@
         };
 
       hjem =
-        { pkgs, ... }:
+        { config, pkgs, ... }:
+        let
+          theme = config.local.theme.base16;
+          hex = theme.helpers.hex;
+          textColor = if theme.variant == "dark" then theme.base06 else theme.base05;
+          outlineColor = if theme.variant == "dark" then theme.base05 else theme.base04;
+          secondaryColor = if theme.variant == "dark" then theme.base0D else theme.base0A;
+          primaryText = if theme.variant == "dark" then theme.base00 else theme.base01;
+          dmsTheme = {
+            background = hex theme.base00;
+            backgroundText = hex textColor;
+            error = hex theme.base08;
+            info = hex theme.base0A;
+            outline = hex outlineColor;
+            primary = hex theme.base0B;
+            primaryContainer = hex theme.base0F;
+            primaryText = hex primaryText;
+            secondary = hex secondaryColor;
+            surface = hex theme.base01;
+            surfaceContainer = hex theme.base02;
+            surfaceContainerHigh = hex theme.base03;
+            surfaceContainerHighest = hex theme.base04;
+            surfaceText = hex textColor;
+            surfaceTint = hex theme.base03;
+            surfaceVariant = hex theme.base00;
+            surfaceVariantText = hex textColor;
+            warning = hex theme.base09;
+          };
+        in
         {
           xdg.config.files = {
             "DankMaterialShell/settings.json" = {
@@ -50,7 +78,13 @@
                 customThemeFile = "${userHome}/.config/DankMaterialShell/theme.json";
               };
             };
-            "DankMaterialShell/theme.json".source = ./theme.json;
+            "DankMaterialShell/theme.json" = {
+              generator = (pkgs.formats.json { }).generate "dms-theme.json";
+              value = {
+                dark = dmsTheme;
+                light = dmsTheme;
+              };
+            };
           };
         };
     };

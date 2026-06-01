@@ -23,6 +23,13 @@ Guidelines for agentic coding assistents working on nix-config.
 - Use `nixfmt` for linting
 - Use a dry-run: `nixos-rebuild dry-run --flake .#loki` for the loki host
 
+## Theming
+
+- Desktop theming is centralized in `modules/desktop/theme.nix`
+- Per-user theme selection lives on the host user records, for example `den.hosts.x86_64-linux.loki.users.dave.theme.base16.scheme`
+- Desktop app modules should consume the shared Base16 palette from `local.theme.base16` instead of hard-coding colors per app
+- When adding new schemes, extend the catalog in `modules/desktop/theme.nix`
+
 ## Boundaries
 
 - ✅ **Always do:** Write new aspects, make small changes to existing aspects, run `nixfmt` for linting
