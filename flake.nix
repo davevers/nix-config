@@ -15,7 +15,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     import-tree.url = "github:vic/import-tree";
-    jailed-agents.url = "github:davevers/jailed-agents";
+    llm-agents.url = "github:numtide/llm-agents.nix";
     nixpkgs.url = "github:nixos/nixpkgs/26.05";
   };
 }
