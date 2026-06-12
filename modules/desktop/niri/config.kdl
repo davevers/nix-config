@@ -73,6 +73,11 @@ layout {
         off
     }
 
+    border {
+        on
+        width 2
+    }
+
     shadow {
         on
         color "#00000070"
@@ -140,6 +145,8 @@ layer-rule {
     place-within-backdrop true
 }
 
-include "theme.kdl"
+include "stylix.kdl"
 include "keybinds.kdl"
 include "outputs.kdl"
+
+spawn-at-startup "noctalia"

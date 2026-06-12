@@ -1,15 +1,15 @@
 {
-  den.aspects.desktop = {
-    nixos =
-      { pkgs, ... }:
-      {
-        # This enables Chromium policies; install the desired browser package explicitly.
-        programs.chromium = {
-          enable = true;
+  den.aspects.desktop =
+    { host, user, ... }:
+    {
+      homeManager =
+        { pkgs, ... }:
+        {
+          # This enables Chromium policies; install the desired browser package explicitly.
+          programs.chromium = {
+            enable = true;
+            package = pkgs.ungoogled-chromium;
+          };
         };
-        environment.systemPackages = [
-          pkgs.ungoogled-chromium
-        ];
-      };
-  };
+    };
 }

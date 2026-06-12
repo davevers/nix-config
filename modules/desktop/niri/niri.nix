@@ -18,40 +18,31 @@
           };
         };
 
-      hjem =
+      homeManager =
         { config, pkgs, ... }:
         let
-          theme = config.local.theme.base16;
-          hex = theme.helpers.hex;
-          rgba = theme.helpers.rgba;
+          theme = config.lib.stylix.colors.withHashtag;
         in
         {
-          packages = with pkgs; [
+          home.packages = with pkgs; [
             cliphist
             wl-clipboard
           ];
-          xdg.config.files = {
+          xdg.configFile = {
             "niri/config.kdl".source = ./config.kdl;
             "niri/keybinds.kdl".source = ./keybinds.kdl;
             "niri/outputs.kdl".source = ./outputs.kdl;
-            "niri/theme.kdl".text = ''
+            "niri/stylix.kdl".text = ''
               layout {
                   border {
-                      on
-                      width 2
-                      active-color   "${hex theme.base0D}"
-                      inactive-color "${hex theme.base03}"
-                      urgent-color   "${hex theme.base08}"
+                      active-color   "${theme.base0D}"
+                      inactive-color "${theme.base03}"
+                      urgent-color   "${theme.base08}"
                   }
-
                   tab-indicator {
-                      active-color   "${hex theme.base0D}"
-                      inactive-color "${hex theme.base03}"
-                      urgent-color   "${hex theme.base08}"
-                  }
-
-                  insert-hint {
-                      color "#${rgba theme.base0D "80"}"
+                      active-color   "${theme.base0D}"
+                      inactive-color "${theme.base03}"
+                      urgent-color   "${theme.base08}"
                   }
               }
             '';

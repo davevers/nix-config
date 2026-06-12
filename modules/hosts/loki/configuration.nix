@@ -1,7 +1,10 @@
 { den, ... }:
 {
   den.hosts.x86_64-linux.loki.users.dave = {
-    theme.base16.scheme = "everforest-dark-hard";
+    classes = [
+      "homeManager"
+      "hjem"
+    ];
   };
 
   den.aspects.loki-firmware = {
@@ -28,8 +31,6 @@
 
     # host NixOS configuration
     nixos = {
-      local.dms.greeterUser = "dave";
-
       boot = {
         extraModprobeConfig = ''
           options snd-hda-intel dmic_detect=0
@@ -43,10 +44,6 @@
         trusted-users = [ "dave" ];
         extra-substituters = [
           "https://cache.nixos.org"
-          "https://cache.numtide.com"
-        ];
-        extra-trusted-public-keys = [
-          "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
         ];
       };
     };

@@ -6,7 +6,7 @@ Guidelines for agentic coding assistents working on nix-config.
 
 - This is a personal repository containing my nix configuration for several hosts and users.
 - It uses a dendritic pattern with aspects using denful/den
-- Homemanager is not used, hjem is used to manage home files
+- Homemanager is used for userspace packages and configuration management
 - In the future, I might want to migrate to wrapped packages instead
 - File structure:
     - `modules/`: contains aspects that are used in the configuration
