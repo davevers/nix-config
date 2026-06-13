@@ -3,9 +3,11 @@
     { host, user, ... }:
     {
       homeManager =
-        { lib, ... }:
+        { pkgs, ... }:
         {
-          dconf.settings."org/gnome/desktop/interface".color-scheme = lib.mkForce "prefer-dark";
+          home.packages = with pkgs; [
+            seahorse
+          ];
         };
     };
 }
