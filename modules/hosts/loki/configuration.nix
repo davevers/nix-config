@@ -1,10 +1,6 @@
 { den, ... }:
 {
   den.hosts.x86_64-linux.loki.users.dave = {
-    classes = [
-      "homeManager"
-      "hjem"
-    ];
   };
 
   den.aspects.loki-firmware = {

@@ -2,12 +2,11 @@
   den.aspects.dev =
     { user, ... }:
     {
-      hjem =
-        { pkgs, ... }:
-        {
-          packages = [
-            pkgs.gh
-          ];
+      homeManager = {
+        programs.gh = {
+          enable = true;
+          gitCredentialHelper.enable = true;
         };
+      };
     };
 }

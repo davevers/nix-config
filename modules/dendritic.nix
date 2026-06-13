@@ -10,10 +10,6 @@
     nixpkgs.url = "github:nixos/nixpkgs/26.05";
     den.url = "github:denful/den";
     flake-file.url = "github:vic/flake-file";
-    hjem = {
-      url = "github:feel-co/hjem";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     home-manager = {
       url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
