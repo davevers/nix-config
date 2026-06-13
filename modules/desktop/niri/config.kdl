@@ -5,7 +5,6 @@ input {
         repeat-rate 40
         xkb {
             layout "us"
-            variant "intl"
             options "compose:ralt,caps:ctrl_modifier,caps:escape_shifted_capslock"
         }
     }
@@ -34,7 +33,7 @@ input {
 	}
 
   // warp-mouse-to-focus
-  // focus-follows-mouse max-scroll-amount="0%"
+  focus-follows-mouse max-scroll-amount="0%"
   workspace-auto-back-and-forth
 }
 
@@ -52,13 +51,8 @@ environment {
     QT_QPA_PLATFORMTHEME_QT6 "gtk3"
 }
 
-cursor {
-    xcursor-theme "Bibata-Modern-Classic"
-    xcursor-size 24
-}
-
 layout {
-    gaps 12
+    gaps 8
     center-focused-column "never"
     preset-column-widths {
         proportion 0.33333
@@ -70,12 +64,12 @@ layout {
     background-color "transparent"
 
     focus-ring {
-        off
+        on
+        width 2
     }
 
     border {
-        on
-        width 2
+        off
     }
 
     shadow {
@@ -117,32 +111,23 @@ window-rule {
 // Example: enable rounded corners for all windows.
 // (This example rule is commented out with a "/-" in front.)
 window-rule {
-     geometry-corner-radius 12
+     geometry-corner-radius 8
     clip-to-geometry true
 	  tiled-state true
 	  draw-border-with-background false
 }
 
+// Floating Noctalia settings window.
 window-rule {
-    match app-id=r#"^org\.gnome\."#
-    draw-border-with-background false
-    geometry-corner-radius 12
-    clip-to-geometry true
-}
-
-window-rule {
-    match app-id=r#"org.quickshell$"#
-    open-floating true
+  match app-id="dev.noctalia.Noctalia.Settings"
+  open-floating true
+  default-column-width { fixed 1080; }
+  default-window-height { fixed 920; }
 }
 
 layer-rule {
-    match namespace="^quickshell$"
-    place-within-backdrop true
-}
-
-layer-rule {
-    match namespace="dms:blurwallpaper"
-    place-within-backdrop true
+  match namespace="^noctalia-backdrop"
+  place-within-backdrop true
 }
 
 include "stylix.kdl"

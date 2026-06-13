@@ -22,6 +22,7 @@
         { config, pkgs, ... }:
         let
           theme = config.lib.stylix.colors.withHashtag;
+          cursor = config.stylix.cursor;
         in
         {
           home.packages = with pkgs; [
@@ -39,11 +40,21 @@
                       inactive-color "${theme.base03}"
                       urgent-color   "${theme.base08}"
                   }
+                  focus-ring {
+                      active-color   "${theme.base0D}"
+                      inactive-color "${theme.base03}"
+                      urgent-color   "${theme.base08}"
+                  }
                   tab-indicator {
                       active-color   "${theme.base0D}"
                       inactive-color "${theme.base03}"
                       urgent-color   "${theme.base08}"
                   }
+              }
+
+              cursor {
+                xcursor-theme "${cursor.name}"
+                xcursor-size ${builtins.toString cursor.size}
               }
             '';
           };
