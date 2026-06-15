@@ -8,7 +8,6 @@
           settings = {
             gui = {
               nerdFontsVersion = "3";
-              showIcons = true;
             };
           };
         };

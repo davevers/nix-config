@@ -9,6 +9,10 @@
       den.aspects.stylix
     ];
 
+    user = {
+      extraGroups = [ "incus-admin" ];
+    };
+
     homeManager =
       { pkgs, ... }:
       {
@@ -18,7 +22,7 @@
         };
         stylix = {
           polarity = "light";
-          base16Scheme = "${pkgs.base16-schemes}/share/themes/rose-pine-dawn.yaml";
+          base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-latte.yaml";
           cursor = {
             name = "BreezeX-RosePineDawn-Linux";
             package = pkgs.rose-pine-cursor;
