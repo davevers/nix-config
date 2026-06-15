@@ -23,6 +23,7 @@
       den.aspects.desktop
       den.aspects.shell
       den.aspects.dev
+      den.aspects.incus
     ];
 
     # host NixOS configuration
