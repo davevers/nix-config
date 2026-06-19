@@ -1,9 +1,11 @@
 {
-  den.aspects.base = {
+  den.aspects.fonts = {
     nixos =
       { lib, pkgs, ... }:
       {
         fonts.packages = with pkgs; [
+          adwaita-fonts
+          lilex
           noto-fonts
           noto-fonts-cjk-sans
           noto-fonts-color-emoji
@@ -13,15 +15,17 @@
 
         fonts.fontconfig.defaultFonts = {
           sansSerif = lib.mkAfter [
+            "Adwaita Sans"
             "Noto Sans CJK JP"
-            "Noto Color Emoji"
           ];
 
           serif = lib.mkAfter [
+            "Noto Serif"
             "Noto Serif CJK JP"
           ];
 
           monospace = lib.mkAfter [
+            "Lilex"
             "DejaVu Sans Mono"
             "Symbols Nerd Font Mono"
           ];

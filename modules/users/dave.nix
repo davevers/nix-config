@@ -1,4 +1,4 @@
-{ den, ... }:
+{ den, inputs, ... }:
 {
   # user aspect
   den.aspects.dave = {
@@ -6,29 +6,45 @@
       den.batteries.define-user
       den.batteries.primary-user
       (den.batteries.user-shell "fish")
-      den.aspects.stylix
     ];
 
     user = {
       extraGroups = [ "incus-admin" ];
     };
 
-    homeManager =
+    hjem =
       { pkgs, ... }:
       {
-        programs.git = {
-          settings.user.name = "Dave Verstrate";
-          settings.user.email = "daverstrate@gmail.com";
+        impure = {
+          enable = true;
+          dotsDir = "${../../dots}";
+          dotsDirImpure = "/home/dave/workspace/nix-config/dots";
         };
-        stylix = {
-          polarity = "light";
-          base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-latte.yaml";
-          cursor = {
-            name = "BreezeX-RosePineDawn-Linux";
-            package = pkgs.rose-pine-cursor;
-            size = 32;
+
+        packages = [
+          pkgs.xdg-utils
+        ];
+
+        xdg.mime-apps =
+          let
+            browser = "firefox.desktop";
+          in
+          {
+            default-applications = {
+              "text/html" = browser;
+              "application/xhtml+xml" = browser;
+              "x-scheme-handler/http" = browser;
+              "x-scheme-handler/https" = browser;
+              "x-scheme-handler/about" = browser;
+              "x-scheme-handler/unknown" = browser;
+            };
+            added-associations = {
+              "text/html" = browser;
+              "application/xhtml+xml" = browser;
+              "x-scheme-handler/http" = browser;
+              "x-scheme-handler/https" = browser;
+            };
           };
-        };
       };
   };
 }

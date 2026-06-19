@@ -8,11 +8,14 @@
   # other inputs may be defined at a module using them.
   flake-file.inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/26.05";
-    den.url = "github:denful/den";
+    den.url = "github:denful/den/v0.17.0";
     flake-file.url = "github:vic/flake-file";
-    home-manager = {
-      url = "github:nix-community/home-manager/release-26.05";
+    hjem = {
+      url = "github:feel-co/hjem";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+    hjem-impure = {
+      url = "github:Rexcrazy804/hjem-impure";
     };
   };
 }

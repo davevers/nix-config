@@ -3,6 +3,8 @@
   den.aspects.base = {
     includes = [
       den.batteries.hostname
+      den.aspects.fonts
+      den.aspects.xdg-user-dirs
     ];
 
     nixos =
@@ -54,32 +56,7 @@
           LC_TIME = "nl_NL.UTF-8";
         };
 
-        security.pam.services.login.enableGnomeKeyring = true;
-
-        # services.greetd = {
-        #   enable = true;
-        #   settings = {
-        #     initial_session = {
-        #       # Starts niri session logged in automatically without prompt
-        #       command = "niri-session";
-        #       user = "tux";
-        #     };
-        #     default_session = {
-        #       command = "${pkgs.tuigreet}/bin/tuigreet --remember  --asterisks  --container-padding 2 --no-xsession-wrapper --cmd niri-session";
-        #     };
-        #   };
-        # };
-
-        # security.pam.services.greetd.text = ''
-        #   auth      substack      login
-        #   account   include       login
-        #   password  substack      login
-        #   session   optional      ${pkgs.pam_fde_boot_pw}/lib/security/pam_fde_boot_pw.so inject_for=gkr
-        #   session   include       login
-        # '';
         boot.initrd.systemd.enable = true;
-        services.gnome.gnome-keyring.enable = true;
-
         # Enable CUPS to print documents.
         services.printing.enable = true;
 

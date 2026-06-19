@@ -1,21 +1,27 @@
 {
-  den.aspects.desktop =
+  den.aspects.kitty =
     { host, user, ... }:
     {
-      homeManager = {
-        programs.kitty = {
-          enable = true;
-          settings = {
-            # symbol_map =
-            #   let
-            #     mappings = [
-            #       "U+25B6"
-            #       "U+25BC"
-            #     ];
-            #   in
-            #   (builtins.concatStringsSep "," mappings) + " DejaVu Sans Mono";
-          };
+      nixos =
+        { pkgs, ... }:
+        {
+          environment.systemPackages = [
+            pkgs.kitty
+          ];
         };
-      };
+      hjem =
+        { config, ... }:
+        {
+          xdg.config.files =
+            let
+              dots = config.impure.dotsDir;
+            in
+            {
+              "kitty/kitty.conf".source = dots + "/kitty/kitty.conf";
+              "kitty/light-theme.auto.conf".source = dots + "/kitty/light-theme.auto.conf";
+              "kitty/dark-theme.auto.conf".source = dots + "/kitty/dark-theme.auto.conf";
+              "kitty/no-preference-theme.auto.conf".source = dots + "/kitty/no-preference-theme.auto.conf";
+            };
+        };
     };
 }

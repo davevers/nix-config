@@ -1,11 +1,9 @@
 {
-  den.aspects.desktop =
-    { host, user, ... }:
-    {
-      homeManager = {
-        programs.zed-editor = {
-          enable = true;
-        };
+  den.aspects.zed = {
+    nixos =
+      { pkgs, ... }:
+      {
+        environment.systemPackages = with pkgs; [ zed-editor-fhs ];
       };
-    };
+  };
 }

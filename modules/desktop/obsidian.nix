@@ -1,15 +1,15 @@
 { den, ... }:
 {
-  den.aspects.desktop =
-    { host, user, ... }:
-    {
-      includes = [
-        (den.batteries.unfree [
-          "obsidian"
-        ])
-      ];
-      homeManager = {
-        programs.obsidian.enable = true;
+  den.aspects.obsidian = {
+    includes = [
+      (den.batteries.unfree [
+        "obsidian"
+      ])
+    ];
+    nixos =
+      { pkgs, ... }:
+      {
+        environment.systemPackages = [ pkgs.obsidian ];
       };
-    };
+  };
 }

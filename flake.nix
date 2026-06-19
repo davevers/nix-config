@@ -4,38 +4,29 @@
   outputs = inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; } (inputs.import-tree ./modules);
 
   nixConfig = {
-    extra-substituters = [
-      "https://cache.numtide.com"
-      "https://noctalia.cachix.org"
-    ];
-    extra-trusted-public-keys = [
-      "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
-      "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
-    ];
+    extra-substituters = [ "https://cache.numtide.com" ];
+    extra-trusted-public-keys = [ "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g=" ];
   };
 
   inputs = {
-    den.url = "github:denful/den";
+    den.url = "github:denful/den/v0.17.0";
     flake-file.url = "github:vic/flake-file";
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
-    home-manager = {
-      url = "github:nix-community/home-manager/release-26.05";
+    helium-browser = {
+      url = "github:ominit/helium-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    hjem = {
+      url = "github:feel-co/hjem";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    hjem-impure.url = "github:Rexcrazy804/hjem-impure";
     import-tree.url = "github:vic/import-tree";
     llm-agents.url = "github:numtide/llm-agents.nix";
     nixpkgs.url = "github:nixos/nixpkgs/26.05";
     noctalia.url = "github:noctalia-dev/noctalia";
-    nur = {
-      url = "github:nix-community/NUR";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    stylix = {
-      url = "github:nix-community/stylix/release-26.05";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 }

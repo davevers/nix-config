@@ -8,7 +8,7 @@ input {
             options "compose:ralt,caps:ctrl_modifier,caps:escape_shifted_capslock"
         }
     }
-  touchpad {
+touchpad {
     tap
     // dwt
     natural-scroll
@@ -21,7 +21,7 @@ input {
     // disabled-on-external-mouse
     // middle-emulation
   }
-  mouse {
+mouse {
     // natural-scroll
     accel-speed 0.2
     accel-profile "flat"
@@ -36,6 +36,11 @@ input {
   focus-follows-mouse max-scroll-amount="0%"
   workspace-auto-back-and-forth
 }
+
+cursor {
+    xcursor-theme "BreezeX-RosePineDawn-Linux"
+    xcursor-size 32
+    }
 
 gestures {
     hot-corners {
@@ -130,7 +135,6 @@ layer-rule {
   place-within-backdrop true
 }
 
-include "stylix.kdl"
 include "keybinds.kdl"
 include "outputs.kdl"
 
