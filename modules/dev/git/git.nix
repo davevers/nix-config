@@ -1,11 +1,10 @@
 {
-  den.aspects.dev =
-    { host, user, ... }:
-    {
-      nixos = {
-        programs.git.enable = true;
-      };
+  den.aspects.dev = {
+    nixos = {
+      programs.git.enable = true;
+    };
 
+    provides.to-users = {
       hjem = {
         xdg.config.files = {
           "git/config".text = ''
@@ -24,4 +23,5 @@
         };
       };
     };
+  };
 }

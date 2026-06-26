@@ -1,7 +1,6 @@
 {
-  den.aspects.dev =
-    { user, ... }:
-    {
+  den.aspects.dev = {
+    provides.to-users = {
       hjem =
         { pkgs, ... }:
         {
@@ -10,4 +9,5 @@
           ];
         };
     };
+  };
 }

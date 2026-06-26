@@ -1,31 +1,30 @@
 { den, ... }:
 {
-  den.aspects.desktop =
-    { user, host, ... }:
-    {
-      includes = with den.aspects; [
-        firefox
-        ghostty
-        greeterd
-        helium
-        kitty
-        niri
-        noctalia
-        obsidian
-        vscodium
-        zed
-      ];
+  den.aspects.desktop = {
+    includes = with den.aspects; [
+      firefox
+      ghostty
+      greeterd
+      helium
+      kitty
+      niri
+      noctalia
+      obsidian
+      vscodium
+      zed
+    ];
 
-      nixos =
-        { pkgs, ... }:
-        {
-          environment.systemPackages = with pkgs; [
-            seahorse
-            nautilus
-            papirus-icon-theme
-          ];
-        };
+    nixos =
+      { pkgs, ... }:
+      {
+        environment.systemPackages = with pkgs; [
+          seahorse
+          nautilus
+          papirus-icon-theme
+        ];
+      };
 
+    provides.to-users = {
       hjem = {
         files =
           let
@@ -41,4 +40,5 @@
           };
       };
     };
+  };
 }

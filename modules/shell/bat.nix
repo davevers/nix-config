@@ -1,13 +1,13 @@
 { self, ... }:
 {
-  den.aspects.shell =
-    { host, user, ... }:
-    {
-      nixos =
-        { pkgs, ... }:
-        {
-          environment.systemPackages = [ pkgs.bat ];
-        };
+  den.aspects.shell = {
+    nixos =
+      { pkgs, ... }:
+      {
+        environment.systemPackages = [ pkgs.bat ];
+      };
+
+    provides.to-users = {
       hjem = {
         xdg.config.files = {
           "bat/config".text = "--theme=\"Rose-Pine-Dawn\"";
@@ -15,4 +15,5 @@
         };
       };
     };
+  };
 }

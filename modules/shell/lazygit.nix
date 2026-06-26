@@ -1,11 +1,9 @@
 {
-  den.aspects.ghostty = {
+  den.aspects.shell = {
     nixos =
       { pkgs, ... }:
       {
-        environment.systemPackages = [
-          pkgs.ghostty
-        ];
+        environment.systemPackages = [ pkgs.lazygit ];
       };
 
     provides.to-users = {
@@ -17,7 +15,7 @@
               dots = config.impure.dotsDir;
             in
             {
-              "ghostty/config.ghostty".source = dots + "/ghostty/config.ghostty";
+              "lazygit/config.yml".source = dots + "/lazygit/config.yml";
             };
         };
     };

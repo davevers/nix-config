@@ -6,10 +6,7 @@
 
   # USER TODO: remove this tty-autologin used for the VM
   den.aspects.igloo = {
-    includes = [ (den.batteries.vm-autologin "tux") ];
-    nixos = {
-      users.users.tux.initialPassword = "test123";
-    };
+    includes = [ (den.batteries.vm-autologin "dave") ];
   };
 
   perSystem =
