@@ -37,7 +37,7 @@
       };
 
       nix.settings = {
-        trusted-users = [ "dave" ];
+        trusted-users = [ "@wheel" ];
         extra-substituters = [
           "https://cache.nixos.org"
         ];
