@@ -1,5 +1,4 @@
 {
-  den,
   inputs,
   self,
   ...

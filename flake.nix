@@ -41,6 +41,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixpkgs.url = "github:nixos/nixpkgs/26.05";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     noctalia.url = "github:noctalia-dev/noctalia/cachix";
     sops-nix = {
       url = "github:Mic92/sops-nix";
