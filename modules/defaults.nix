@@ -13,14 +13,4 @@
       "hjem"
     ];
   };
-
-  den.schema.host = {
-    includes = [
-      {
-        nixos.hjem.extraModules = [
-          inputs.hjem-impure.hjemModules.default
-        ];
-      }
-    ];
-  };
 }

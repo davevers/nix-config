@@ -7,3 +7,7 @@ result-*
 
 # Ignore vm builds
 *.qcow2
+
+# Never commit private age identities
+**/keys.txt
+*.agekey

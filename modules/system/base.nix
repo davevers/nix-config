@@ -3,8 +3,6 @@
   den.aspects.base = {
     includes = [
       den.batteries.hostname
-      den.aspects.fonts
-      den.aspects.xdg-user-dirs
     ];
 
     nixos =
@@ -12,31 +10,24 @@
       {
         nix = {
           settings = {
+            auto-optimise-store = true;
+            trusted-users = [ "@wheel" ];
             experimental-features = "nix-command flakes";
+            extra-substituters = [
+              "https://cache.nixos.org"
+            ];
           };
           gc = {
             automatic = true;
             dates = "weekly";
-            options = "--delete-older-than 7d";
+            options = "--delete-older-than 30d";
           };
         };
-        boot = {
-          loader = {
-            systemd-boot.enable = true;
-            efi.canTouchEfiVariables = true;
-            systemd-boot.configurationLimit = 10;
-          };
-          plymouth.enable = true;
-        };
 
-        networking.networkmanager.enable = true;
-
-        hardware.bluetooth = {
+        zramSwap = {
           enable = true;
-          powerOnBoot = true;
+          memoryPercent = 25;
         };
-
-        hardware.enableAllFirmware = true;
 
         # Set your time zone.
         time.timeZone = "Europe/Amsterdam";
@@ -56,25 +47,16 @@
           LC_TIME = "nl_NL.UTF-8";
         };
 
-        boot.initrd.systemd.enable = true;
-        # Enable CUPS to print documents.
-        services.printing.enable = true;
-
-        # Enable sound with pipewire.
-        services.pulseaudio.enable = false;
-        security.rtkit.enable = true;
-        services.pipewire = {
-          enable = true;
-          alsa.enable = true;
-          alsa.support32Bit = true;
-          pulse.enable = true;
-        };
-
-        services.tuned.enable = true;
-        services.upower.enable = true;
-
         environment.systemPackages = with pkgs; [
+          # smartmontools
+          btop
+          curl
+          dig
+          ethtool
           git
+          lm_sensors
+          lsof
+          tmux
           vim
           wget
         ];

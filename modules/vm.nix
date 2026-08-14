@@ -5,9 +5,9 @@
 {
 
   # USER TODO: remove this tty-autologin used for the VM
-  den.aspects.igloo = {
-    includes = [ (den.batteries.vm-autologin "dave") ];
-  };
+  # den.aspects.igloo = {
+  #   includes = [ (den.batteries.vm-autologin "dave") ];
+  # };
 
   perSystem =
     { pkgs, ... }:
