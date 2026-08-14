@@ -9,6 +9,7 @@
       den.aspects.ssh
       den.aspects.sops
       den.aspects.tailscale
+      den.aspects.shell
     ];
 
     nixos = {
