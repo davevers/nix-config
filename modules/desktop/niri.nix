@@ -3,6 +3,11 @@
   den.aspects.niri = {
     nixos =
       { pkgs, ... }:
+      let
+        polkit-agent = pkgs.writeShellScriptBin "polkit-agent" ''
+            exec ${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1
+        '';
+      in
       {
         programs.niri.enable = true;
         xdg.portal = {
@@ -18,6 +23,7 @@
           rose-pine-cursor
           cliphist
           wl-clipboard
+          polkit-agent
         ];
       };
 

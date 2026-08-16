@@ -21,11 +21,9 @@
             enable = true;
             settings = {
               default_session = {
-                command = ''
-                  ${pkgs.dbus}/bin/dbus-run-session ${pkgs.niri}/bin/niri --config ${niri-conf}
-                '';
+                command = "${pkgs.dbus}/bin/dbus-run-session ${pkgs.niri}/bin/niri --config ${niri-conf}";
+                user = "greeter";
               };
-              user = "greeter";
             };
           };
 

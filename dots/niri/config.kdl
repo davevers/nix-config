@@ -146,3 +146,4 @@ include "keybinds.kdl"
 include "outputs.kdl"
 
 spawn-at-startup "noctalia"
+spawn-at-startup "polkit-agent"
