@@ -1,6 +1,7 @@
 keys:
   - &admin_dave age103ulnzwakruvv05z0kk7weau8s7ahc59gpr7q7e474n2puu0jsqqcm6859
   - &server_virmire age1wnw5736lhf0vwj4v9zdy5smtxj2hqmm95mp62enrsk7nah70p40smepymm
+  - &server_noveria age15vd99xg8fjynkqjtgtgkvcgarsar3klsxnupfma37qy6ddzkecmsdu852e
 
 creation_rules:
   - path_regex: secrets/common.yaml
@@ -8,7 +9,13 @@ creation_rules:
       - age:
           - *admin_dave
           - *server_virmire
+          - *server_noveria
   - path_regex: ^secrets/virmire\.yaml$
+    key_groups:
+      - age:
+          - *admin_dave
+          - *server_virmire
+  - path_regex: ^secrets/noveria\.yaml$
     key_groups:
       - age:
           - *admin_dave
