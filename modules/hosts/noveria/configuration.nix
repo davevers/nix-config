@@ -27,52 +27,52 @@
       };
 
       fileSystems."/mnt/storage/photos" = {
-          device = "/dev/mapper/p1";
-          fsType = "btrfs";
-          options = [
-            "noauto"
-            "nofail"
-            "compress=zstd"
-            "noatime"
-            "subvol=@photos"
-          ];
-        };
+        device = "/dev/mapper/p1";
+        fsType = "btrfs";
+        options = [
+          "noauto"
+          "nofail"
+          "compress=zstd"
+          "noatime"
+          "subvol=@photos"
+        ];
+      };
 
-        fileSystems."/mnt/storage/media" = {
-          device = "/dev/mapper/p1";
-          fsType = "btrfs";
-          options = [
-            "noauto"
-            "nofail"
-            "compress=zstd"
-            "noatime"
-            "subvol=@media"
-          ];
-        };
+      fileSystems."/mnt/storage/media" = {
+        device = "/dev/mapper/p1";
+        fsType = "btrfs";
+        options = [
+          "noauto"
+          "nofail"
+          "compress=zstd"
+          "noatime"
+          "subvol=@media"
+        ];
+      };
 
-        fileSystems."/mnt/storage/documents" = {
-          device = "/dev/mapper/p1";
-          fsType = "btrfs";
-          options = [
-            "noauto"
-            "nofail"
-            "compress=zstd"
-            "noatime"
-            "subvol=@documents"
-          ];
-        };
+      fileSystems."/mnt/storage/documents" = {
+        device = "/dev/mapper/p1";
+        fsType = "btrfs";
+        options = [
+          "noauto"
+          "nofail"
+          "compress=zstd"
+          "noatime"
+          "subvol=@documents"
+        ];
+      };
 
-        fileSystems."/mnt/storage/backups" = {
-          device = "/dev/mapper/p1";
-          fsType = "btrfs";
-          options = [
-            "noauto"
-            "nofail"
-            "compress=zstd"
-            "noatime"
-            "subvol=@backups"
-          ];
-        };
+      fileSystems."/mnt/storage/backups" = {
+        device = "/dev/mapper/p1";
+        fsType = "btrfs";
+        options = [
+          "noauto"
+          "nofail"
+          "compress=zstd"
+          "noatime"
+          "subvol=@backups"
+        ];
+      };
 
       networking.hostName = "noveria";
       system.stateVersion = lib.mkDefault "26.05";
@@ -84,11 +84,7 @@
         enable = true;
 
         # Do not globally open 80/443 here.
-        allowedTCPPorts = [
-          22
-          88
-          443
-        ];
+        allowedTCPPorts = [ ];
       };
 
       environment.systemPackages = with pkgs; [
