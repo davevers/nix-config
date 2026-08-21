@@ -19,4 +19,4 @@ creation_rules:
     key_groups:
       - age:
           - *admin_dave
-          - *server_virmire
+          - *server_noveria
