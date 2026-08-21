@@ -7,6 +7,7 @@
         owner = "caddy";
         group = "caddy";
       };
+
       sops.templates."caddy-env" = {
         owner = "caddy";
         group = "caddy";
@@ -15,6 +16,7 @@
           CLOUDFLARE_API_TOKEN=${config.sops.placeholder."cloudflare/api-token"}
         '';
       };
+
       services.caddy = {
         enable = true;
         package = pkgs.caddy.withPlugins {
@@ -30,6 +32,11 @@
           acme_dns cloudflare {env.CLOUDFLARE_API_TOKEN}
         '';
       };
+
+      networking.firewall.interfaces.tailscale0.allowedTCPPorts = [
+        80
+        443
+      ];
     };
   };
 }
