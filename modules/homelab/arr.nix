@@ -11,9 +11,21 @@
       ])
     ];
     nixos =
-      { config, ... }:
+      { config, pkgs, ... }:
       let
         mediaRoot = "/mnt/storage/media";
+        mediaMount = "mnt-storage-media.mount";
+        mediaTarget = "arr-media.target";
+        mediaDirectories = map (path: "${mediaRoot}/${path}") [
+          "usenet"
+          "usenet/incomplete"
+          "usenet/complete"
+          "usenet/complete/tv"
+          "usenet/complete/movies"
+          "library"
+          "library/tv"
+          "library/movies"
+        ];
       in
       {
         users.groups.media = { };
@@ -184,31 +196,58 @@
           };
         };
 
+        systemd.targets.arr-media = {
+          description = "Storage-backed ARR and media application stack";
+          # Unlike WantedBy, Upholds also brings the target back after a
+          # changed layout unit temporarily stops it during a NixOS switch.
+          upheldBy = [ mediaMount ];
+          requires = [ "arr-media-layout.service" ];
+          bindsTo = [ mediaMount ];
+          after = [
+            mediaMount
+            "arr-media-layout.service"
+          ];
+        };
+
         systemd.services = {
           arr-media-layout = {
             description = "Create the ARR media directory layout";
-            requires = [ "mnt-storage-media.mount" ];
-            after = [ "mnt-storage-media.mount" ];
+            requires = [ mediaMount ];
+            after = [ mediaMount ];
             unitConfig.RequiresMountsFor = [ mediaRoot ];
             serviceConfig = {
               Type = "oneshot";
               RemainAfterExit = true;
             };
             script = ''
-              install -d -m 2775 -o root -g media \
-                ${mediaRoot}/usenet \
-                ${mediaRoot}/usenet/incomplete \
-                ${mediaRoot}/usenet/complete \
-                ${mediaRoot}/usenet/complete/tv \
-                ${mediaRoot}/usenet/complete/movies \
-                ${mediaRoot}/library \
-                ${mediaRoot}/library/tv \
-                ${mediaRoot}/library/movies
+              if ! ${pkgs.util-linux}/bin/findmnt --mountpoint ${lib.escapeShellArg mediaRoot} >/dev/null; then
+                echo "${mediaRoot} is not a mounted filesystem; refusing to create media directories." >&2
+                exit 1
+              fi
+
+              filesystem_type="$(${pkgs.util-linux}/bin/findmnt --noheadings --output FSTYPE --target ${lib.escapeShellArg mediaRoot})"
+              if [[ "$filesystem_type" != "btrfs" ]]; then
+                echo "Expected ${mediaRoot} to be btrfs, found $filesystem_type." >&2
+                exit 1
+              fi
+
+              install -d -m 2775 -o root -g media ${lib.escapeShellArgs mediaDirectories}
             '';
+          };
+
+          prowlarr = {
+            wantedBy = lib.mkForce [ ];
+            upheldBy = [ mediaTarget ];
+            partOf = [ mediaTarget ];
+            requires = [ "arr-media-layout.service" ];
+            after = [ "arr-media-layout.service" ];
+            unitConfig.RequiresMountsFor = [ mediaRoot ];
           };
 
           sonarr = {
             wantedBy = lib.mkForce [ ];
+            upheldBy = [ mediaTarget ];
+            partOf = [ mediaTarget ];
             requires = [ "arr-media-layout.service" ];
             after = [ "arr-media-layout.service" ];
             unitConfig.RequiresMountsFor = [ mediaRoot ];
@@ -217,6 +256,8 @@
 
           radarr = {
             wantedBy = lib.mkForce [ ];
+            upheldBy = [ mediaTarget ];
+            partOf = [ mediaTarget ];
             requires = [ "arr-media-layout.service" ];
             after = [ "arr-media-layout.service" ];
             unitConfig.RequiresMountsFor = [ mediaRoot ];
@@ -225,11 +266,35 @@
 
           sabnzbd = {
             wantedBy = lib.mkForce [ ];
+            upheldBy = [ mediaTarget ];
+            partOf = [ mediaTarget ];
             requires = [ "arr-media-layout.service" ];
             after = [ "arr-media-layout.service" ];
             unitConfig.RequiresMountsFor = [ mediaRoot ];
             serviceConfig.UMask = "0002";
           };
+
+          recyclarr = {
+            partOf = [ mediaTarget ];
+            requires = [
+              "sonarr.service"
+              "radarr.service"
+            ];
+            after = [
+              "sonarr.service"
+              "radarr.service"
+            ];
+          };
+        };
+
+        systemd.timers.recyclarr = {
+          wantedBy = lib.mkForce [ ];
+          upheldBy = [ mediaTarget ];
+          partOf = [ mediaTarget ];
+          after = [
+            "sonarr.service"
+            "radarr.service"
+          ];
         };
 
         services.caddy.virtualHosts = {

@@ -37,6 +37,8 @@
 
       systemd.services.jellyfin = {
         wantedBy = lib.mkForce [ ];
+        upheldBy = [ "arr-media.target" ];
+        partOf = [ "arr-media.target" ];
         requires = [ "arr-media-layout.service" ];
         after = [ "arr-media-layout.service" ];
         unitConfig.RequiresMountsFor = [ "/mnt/storage/media" ];
