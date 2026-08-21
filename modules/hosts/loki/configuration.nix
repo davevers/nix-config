@@ -42,6 +42,20 @@
           "/dev/disk/by-uuid/4d3dca95-cccf-48da-b970-cae48ccecfd9";
         initrd.systemd.enable = true;
       };
+
+      services.pipewire.wireplumber.extraConfig."51-pebble-x-volume" = {
+        "monitor.alsa.rules" = [
+          {
+            matches = [
+              {
+                "device.vendor.id" = "0x041e";
+                "device.product.id" = "0x3299";
+              }
+            ];
+            actions.update-props."api.alsa.ignore-dB" = true;
+          }
+        ];
+      };
     };
   };
 }
