@@ -358,7 +358,8 @@
         "llm-agents": "llm-agents",
         "nixpkgs": "nixpkgs_3",
         "noctalia": "noctalia",
-        "sops-nix": "sops-nix"
+        "sops-nix": "sops-nix",
+        "wallpkgs": "wallpkgs"
       }
     },
     "sops-nix": {
@@ -435,6 +436,21 @@
       "original": {
         "owner": "numtide",
         "repo": "treefmt-nix",
+        "type": "github"
+      }
+    },
+    "wallpkgs": {
+      "locked": {
+        "lastModified": 1779053539,
+        "narHash": "sha256-EQfScEeutDGzrZnD9gy5OyAwy3t2TUxkC0JwflbOD98=",
+        "owner": "NotAShelf",
+        "repo": "wallpkgs",
+        "rev": "066caa0e504d642986dba696ae5350e4fc1f4f5b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NotAShelf",
+        "repo": "wallpkgs",
         "type": "github"
       }
     }

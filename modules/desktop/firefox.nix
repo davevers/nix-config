@@ -1,7 +1,9 @@
 {
   den.aspects.firefox = {
     nixos = {
-      programs.firefox.enable = true;
+      programs.firefox = {
+        enable = true;
+      };
     };
   };
 }
