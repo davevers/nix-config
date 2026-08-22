@@ -5,12 +5,14 @@
       firefox
       ghostty
       greeterd
-      helium
+      flatpak
       kitty
       niri
       noctalia
+      proton
       obsidian
       vscodium
+      whatsapp
       zed
     ];
 
@@ -22,6 +24,21 @@
           nautilus
           papirus-icon-theme
         ];
+
+        programs.dconf = {
+          enable = true;
+
+          profiles.user.databases = [
+            {
+              settings."org/gnome/desktop/interface" = {
+                font-name = "Adwaita Sans 11";
+                monospace-font-name = "Lilex 12";
+                color-scheme = "prefer-light";
+                gtk-theme = "Adwaita";
+              };
+            }
+          ];
+        };
       };
 
     provides.to-users = {
@@ -30,7 +47,7 @@
           let
             gtkSettings = ''
               [Settings]
-              gtk-font-name=Adwaita Sans 16
+              gtk-font-name=Adwaita Sans 11
               gtk-icon-theme-name=Papirus
             '';
           in
