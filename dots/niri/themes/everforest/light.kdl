@@ -1,0 +1,18 @@
+cursor {
+    xcursor-theme "BreezeX-RosePineDawn-Linux"
+    xcursor-size 32
+}
+
+layout {
+    focus-ring {
+        active-color "#DFA000"
+        inactive-color "#A6B0A0"
+        urgent-color "#F85552"
+    }
+
+    border {
+        active-color "#DFA000"
+        inactive-color "#A6B0A0"
+        urgent-color "#F85552"
+    }
+}

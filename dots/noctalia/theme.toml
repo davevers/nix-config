@@ -1,0 +1,14 @@
+[theme]
+mode = "light"
+source = "builtin"
+builtin = "Rosé Pine"
+
+[theme.templates]
+enable_builtin_templates = true
+enable_community_templates = true
+builtin_ids = []
+community_ids = []
+
+[hooks]
+started = "theme-switch apply"
+theme_mode_changed = 'theme-switch accept-mode "$NOCTALIA_THEME_MODE"'

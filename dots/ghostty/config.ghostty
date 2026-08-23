@@ -1,6 +1,6 @@
 command = fish -l
 window-theme = auto
-theme = dark:Rose Pine,light:Rose Pine Dawn
+config-file = ?theme.ghostty
 font-family = Lilex
 font-size = 14
 freetype-load-flags = no-hinting,no-force-autohint,no-monochrome,no-autohint

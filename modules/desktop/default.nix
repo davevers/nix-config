@@ -9,6 +9,7 @@
       kitty
       niri
       noctalia
+      theming
       proton
       obsidian
       vscodium

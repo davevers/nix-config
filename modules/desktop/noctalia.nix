@@ -24,11 +24,16 @@
       };
 
     provides.to-users = {
-      hjem = {
-        files = {
-          "Pictures/wallpapers/rose-pine".source = inputs.wallpkgs + "/wallpapers/rose-pine";
+      hjem =
+        { config, ... }:
+        {
+          files = {
+            "Pictures/wallpapers/rose-pine".source = inputs.wallpkgs + "/wallpapers/rose-pine";
+            "Pictures/wallpapers/everforest".source = inputs.wallpkgs + "/wallpapers/everforest";
+          };
+
+          xdg.config.files."noctalia/theme.toml".source = config.impure.dotsDir + "/noctalia/theme.toml";
         };
-      };
     };
   };
 }

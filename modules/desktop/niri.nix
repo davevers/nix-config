@@ -5,7 +5,7 @@
       { pkgs, ... }:
       let
         polkit-agent = pkgs.writeShellScriptBin "polkit-agent" ''
-            exec ${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1
+          exec ${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1
         '';
       in
       {
@@ -36,7 +36,9 @@
               dots = config.impure.dotsDir;
             in
             {
-              "niri".source = dots + "/niri";
+              "niri/config.kdl".source = dots + "/niri/config.kdl";
+              "niri/keybinds.kdl".source = dots + "/niri/keybinds.kdl";
+              "niri/outputs.kdl".source = dots + "/niri/outputs.kdl";
             };
         };
     };

@@ -1,0 +1,355 @@
+#!/usr/bin/env bash
+
+set -uo pipefail
+
+catalog="${THEME_SWITCH_CATALOG:-${THEME_SWITCH_CATALOG_DEFAULT}}"
+state_home="${XDG_STATE_HOME:-$HOME/.local/state}"
+config_home="${XDG_CONFIG_HOME:-$HOME/.config}"
+runtime_dir="${XDG_RUNTIME_DIR:-$state_home/theme-switcher/runtime}"
+state_dir="$state_home/theme-switcher"
+state_file="$state_dir/current.json"
+lock_file="$runtime_dir/theme-switch.lock"
+
+die() {
+  printf 'theme-switch: %s\n' "$*" >&2
+  exit 1
+}
+
+warn() {
+  printf 'theme-switch: warning: %s\n' "$*" >&2
+}
+
+catalog_get() {
+  jq -er "$1" "$catalog"
+}
+
+family_get() {
+  local family=$1
+  local query=$2
+  jq -er --arg family "$family" ".families[\$family]$query" "$catalog"
+}
+
+valid_family() {
+  jq -e --arg family "$1" '.families[$family] != null' "$catalog" >/dev/null
+}
+
+valid_mode() {
+  [[ $1 == dark || $1 == light ]]
+}
+
+load_state() {
+  family=$(catalog_get '.default.family')
+  mode=$(catalog_get '.default.mode')
+
+  if [[ -r $state_file ]]; then
+    local saved_family saved_mode
+    saved_family=$(jq -er '.family' "$state_file" 2>/dev/null) || saved_family=
+    saved_mode=$(jq -er '.mode' "$state_file" 2>/dev/null) || saved_mode=
+
+    if valid_family "$saved_family"; then
+      family=$saved_family
+    else
+      warn "ignoring unknown family '$saved_family' in $state_file"
+    fi
+
+    if valid_mode "$saved_mode"; then
+      mode=$saved_mode
+    else
+      warn "ignoring invalid mode '$saved_mode' in $state_file"
+    fi
+  fi
+}
+
+save_state() {
+  mkdir -p "$state_dir"
+  local temporary
+  temporary=$(mktemp "$state_dir/.current.json.XXXXXX") || return 1
+  jq -n --arg family "$family" --arg mode "$mode" \
+    '{version: 1, family: $family, mode: $mode}' >"$temporary"
+  chmod 600 "$temporary"
+  mv -f "$temporary" "$state_file"
+}
+
+install_asset() {
+  local source=$1
+  local destination=$2
+  local destination_dir temporary
+  destination_dir=$(dirname "$destination")
+  mkdir -p "$destination_dir"
+
+  if [[ -f $destination ]] && cmp -s "$source" "$destination"; then
+    return 1
+  fi
+
+  temporary=$(mktemp "$destination_dir/.theme-switch.XXXXXX") || return 2
+  cp "$source" "$temporary"
+  chmod 644 "$temporary"
+  mv -f "$temporary" "$destination"
+  return 0
+}
+
+apply_noctalia() {
+  [[ ${THEME_SWITCH_SKIP_NOCTALIA:-0} == 1 ]] && return 0
+  command -v noctalia >/dev/null 2>&1 || return 0
+
+  local source name current_mode current_scheme
+  source=$(family_get "$family" '.noctalia.source') || return 1
+  name=$(family_get "$family" '.noctalia.name') || return 1
+  wallpaper=$(family_get "$family" '.noctalia.wallpaper') || return 1
+  current_mode=$(noctalia msg theme-mode-get 2>/dev/null) || current_mode=
+  current_scheme=$(noctalia msg color-scheme-get 2>/dev/null) || current_scheme=
+
+  if [[ $current_scheme != "$source $name" ]]; then
+    noctalia msg color-scheme-set "$source" "$name" >/dev/null || return 1
+    noctalia msg wallpaper-set "$wallpaper" >/dev/null || return 1
+  fi
+  if [[ $current_mode != "$mode" ]]; then
+    noctalia msg theme-mode-set "$mode" >/dev/null || return 1
+  fi
+}
+
+apply_system_mode() {
+  [[ ${THEME_SWITCH_SKIP_SYSTEM:-0} == 1 ]] && return 0
+  command -v gsettings >/dev/null 2>&1 || return 0
+  gsettings set org.gnome.desktop.interface color-scheme "prefer-$mode"
+}
+
+apply_kitty() {
+  local dark light no_preference
+  dark=$(family_get "$family" '.applications.kitty.dark') || return 1
+  light=$(family_get "$family" '.applications.kitty.light') || return 1
+  no_preference=$(family_get "$family" '.applications.kitty.noPreference') || return 1
+
+  install_asset "$dark" "$config_home/kitty/dark-theme.auto.conf" || [[ $? == 1 ]] || return 1
+  install_asset "$light" "$config_home/kitty/light-theme.auto.conf" || [[ $? == 1 ]] || return 1
+  install_asset "$no_preference" "$config_home/kitty/no-preference-theme.auto.conf" || [[ $? == 1 ]] || return 1
+}
+
+apply_ghostty() {
+  local dark light temporary
+  dark=$(family_get "$family" '.applications.ghostty.dark') || return 1
+  light=$(family_get "$family" '.applications.ghostty.light') || return 1
+  mkdir -p "$config_home/ghostty"
+  temporary=$(mktemp "$config_home/ghostty/.theme.XXXXXX") || return 1
+  printf 'theme = dark:%s,light:%s\n' "$dark" "$light" >"$temporary"
+  chmod 644 "$temporary"
+  if [[ -f $config_home/ghostty/theme.ghostty ]] \
+    && cmp -s "$temporary" "$config_home/ghostty/theme.ghostty"; then
+    rm -f "$temporary"
+  else
+    mv -f "$temporary" "$config_home/ghostty/theme.ghostty"
+  fi
+}
+
+apply_bat() {
+  local dark_name dark_source light_name light_source selected_name changed=0 result
+  dark_name=$(family_get "$family" '.applications.bat.dark.name') || return 1
+  dark_source=$(family_get "$family" '.applications.bat.dark.path') || return 1
+  light_name=$(family_get "$family" '.applications.bat.light.name') || return 1
+  light_source=$(family_get "$family" '.applications.bat.light.path') || return 1
+  selected_name=$(family_get "$family" ".applications.bat.$mode.name") || return 1
+
+  install_asset "$dark_source" "$config_home/bat/themes/$dark_name.tmTheme"
+  result=$?
+  [[ $result == 0 ]] && changed=1
+  [[ $result == 0 || $result == 1 ]] || return 1
+
+  install_asset "$light_source" "$config_home/bat/themes/$light_name.tmTheme"
+  result=$?
+  [[ $result == 0 ]] && changed=1
+  [[ $result == 0 || $result == 1 ]] || return 1
+
+  mkdir -p "$config_home/bat"
+  local temporary
+  temporary=$(mktemp "$config_home/bat/.config.XXXXXX") || return 1
+  printf -- '--theme="%s"\n' "$selected_name" >"$temporary"
+  chmod 644 "$temporary"
+  if [[ -f $config_home/bat/config ]] && cmp -s "$temporary" "$config_home/bat/config"; then
+    rm -f "$temporary"
+  else
+    mv -f "$temporary" "$config_home/bat/config"
+  fi
+
+  if (( changed )); then
+    bat cache --build >/dev/null || return 1
+  fi
+}
+
+apply_lazygit() {
+  local source
+  source=$(family_get "$family" ".applications.lazygit.$mode") || return 1
+  install_asset "$source" "$config_home/lazygit/config.yml" || [[ $? == 1 ]] || return 1
+}
+
+apply_fzf() {
+  local source
+  source=$(family_get "$family" ".applications.fzf.$mode") || return 1
+  install_asset "$source" "$state_dir/fzf.conf" || [[ $? == 1 ]] || return 1
+}
+
+apply_fish() {
+  local name source result
+  name=$(family_get "$family" '.applications.fish.name') || return 1
+  source=$(family_get "$family" '.applications.fish.path') || return 1
+  install_asset "$source" "$config_home/fish/themes/$name.theme"
+  result=$?
+  [[ $result == 0 || $result == 1 ]] || return 1
+  # The expansion belongs to the child Fish process, not this Bash script.
+  # shellcheck disable=SC2016
+  fish -c 'fish_config theme choose $argv[1]' "$name" >/dev/null
+}
+
+apply_niri() {
+  local source result
+  source=$(family_get "$family" ".applications.niri.$mode") || return 1
+  install_asset "$source" "$config_home/niri/theme.kdl"
+  result=$?
+  if [[ $result == 0 ]]; then
+    niri msg action load-config-file >/dev/null 2>&1 || true
+    return 0
+  fi
+  [[ $result == 1 ]]
+}
+
+run_adapter() {
+  local label=$1
+  shift
+  if ! "$@"; then
+    warn "$label adapter failed"
+    failures=$((failures + 1))
+  fi
+}
+
+apply_all() {
+  local include_noctalia=${1:-yes}
+  failures=0
+  run_adapter "desktop preference" apply_system_mode
+  run_adapter kitty apply_kitty
+  run_adapter ghostty apply_ghostty
+  run_adapter bat apply_bat
+  run_adapter lazygit apply_lazygit
+  run_adapter fzf apply_fzf
+  run_adapter fish apply_fish
+  run_adapter niri apply_niri
+  if [[ $include_noctalia == yes ]]; then
+    run_adapter noctalia apply_noctalia
+  fi
+
+  if (( failures > 0 )); then
+    [[ ${THEME_SWITCH_SKIP_NOTIFY:-0} != 1 ]] \
+      && command -v notify-send >/dev/null 2>&1 \
+      && notify-send "Theme switch incomplete" "$failures adapter(s) failed; run theme-switch apply in a terminal." \
+      || true
+    return 1
+  fi
+}
+
+pick_value() {
+  local prompt=$1
+  if [[ -n ${THEME_PICKER:-} ]]; then
+    sh -c "$THEME_PICKER" -- "$prompt"
+  elif command -v fuzzel >/dev/null 2>&1; then
+    fuzzel --dmenu --prompt "$prompt"
+  elif command -v wofi >/dev/null 2>&1; then
+    wofi --dmenu --prompt "$prompt"
+  elif command -v rofi >/dev/null 2>&1; then
+    rofi -dmenu -p "$prompt"
+  else
+    die "no picker found; set THEME_PICKER or use the family/mode commands"
+  fi
+}
+
+pick_family() {
+  local selection selected_family
+  selection=$(jq -r '.families | to_entries[] | .value.label' "$catalog" | pick_value 'Theme family: ') || exit 0
+  [[ -n $selection ]] || exit 0
+  selected_family=$(jq -er --arg label "$selection" \
+    '.families | to_entries[] | select(.value.label == $label) | .key' "$catalog") \
+    || die "unknown family label '$selection'"
+  family=$selected_family
+}
+
+usage() {
+  cat <<'EOF'
+Usage:
+  theme-switch apply
+  theme-switch family FAMILY
+  theme-switch mode dark|light
+  theme-switch accept-mode dark|light
+  theme-switch toggle
+  theme-switch pick
+  theme-switch pick-mode
+  theme-switch list
+  theme-switch status
+EOF
+}
+
+[[ -r $catalog ]] || die "catalog is not readable: $catalog"
+mkdir -p "$runtime_dir"
+exec 9>"$lock_file"
+flock -n 9 || exit 0
+load_state
+
+command=${1:-status}
+case $command in
+  apply)
+    save_state || die "could not save state"
+    apply_all yes
+    ;;
+  family)
+    [[ $# == 2 ]] || die "family requires one argument"
+    valid_family "$2" || die "unknown family '$2'"
+    family=$2
+    save_state || die "could not save state"
+    apply_all yes
+    ;;
+  mode)
+    [[ $# == 2 ]] || die "mode requires one argument"
+    valid_mode "$2" || die "mode must be dark or light"
+    mode=$2
+    save_state || die "could not save state"
+    apply_all yes
+    ;;
+  accept-mode)
+    [[ $# == 2 ]] || die "accept-mode requires one argument"
+    valid_mode "$2" || die "mode must be dark or light"
+    # Script-driven changes are echoed back through Noctalia's mode hook. If
+    # canonical state already contains that mode, the hook is an acknowledgement
+    # rather than a new user action and must not run the adapters again.
+    [[ $mode == "$2" ]] && exit 0
+    mode=$2
+    save_state || die "could not save state"
+    apply_all no
+    ;;
+  toggle)
+    [[ $mode == dark ]] && mode=light || mode=dark
+    save_state || die "could not save state"
+    apply_all yes
+    ;;
+  pick)
+    pick_family
+    save_state || die "could not save state"
+    apply_all yes
+    ;;
+  pick-mode)
+    selection=$(printf 'Dark\nLight\n' | pick_value 'Theme mode: ') || exit 0
+    [[ -n $selection ]] || exit 0
+    mode=${selection,,}
+    valid_mode "$mode" || die "unknown mode '$selection'"
+    save_state || die "could not save state"
+    apply_all yes
+    ;;
+  list)
+    jq -r '.families | to_entries[] | "\(.key)\t\(.value.label)"' "$catalog"
+    ;;
+  status)
+    printf 'family: %s\nmode: %s\n' "$family" "$mode"
+    ;;
+  help|-h|--help)
+    usage
+    ;;
+  *)
+    usage >&2
+    exit 2
+    ;;
+esac

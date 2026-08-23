@@ -37,11 +37,6 @@ mouse {
   workspace-auto-back-and-forth
 }
 
-cursor {
-    xcursor-theme "BreezeX-RosePineDawn-Linux"
-    xcursor-size 32
-    }
-
 gestures {
     hot-corners {
         off
@@ -137,6 +132,20 @@ window-rule {
   default-window-height { fixed 920; }
 }
 
+window-rule {
+  match app-id="app.zen_browser.zen"
+  background-effect {
+      blur true
+  }
+}
+
+window-rule {
+  match app-id="kitty"
+  background-effect {
+      blur true
+  }
+}
+
 layer-rule {
   match namespace="^noctalia-backdrop"
   place-within-backdrop true
@@ -144,6 +153,7 @@ layer-rule {
 
 include "keybinds.kdl"
 include "outputs.kdl"
+include optional=true "theme.kdl"
 
 spawn-at-startup "noctalia"
 spawn-at-startup "polkit-agent"

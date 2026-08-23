@@ -1,5 +1,8 @@
 # Getting Started Guide
 
+The desktop theme architecture and runtime switcher are documented in
+[docs/theming.md](docs/theming.md).
+
 Steps you can follow after cloning this template:
 
 - Be sure to read the [den documentation](https://den.denful.dev)
