@@ -9,6 +9,7 @@
   den.aspects.noveria = {
     includes = [
       den.aspects.arr
+      den.aspects.immich
       den.aspects.jellyfin
       den.aspects.seerr
       den.aspects.server
@@ -76,8 +77,8 @@
               trap - EXIT
             fi
 
-            echo "Starting the media storage mount and application stack..."
-            systemctl start mnt-storage-media.mount
+            echo "Starting the media and photo storage mounts and application stacks..."
+            systemctl start mnt-storage-media.mount mnt-storage-photos.mount
 
             if ! findmnt --mountpoint /mnt/storage/media >/dev/null; then
               echo "/mnt/storage/media is not mounted." >&2
@@ -85,8 +86,16 @@
             fi
 
             findmnt --mountpoint /mnt/storage/media --output TARGET,SOURCE,FSTYPE,OPTIONS
+            if ! findmnt --mountpoint /mnt/storage/photos >/dev/null; then
+              echo "/mnt/storage/photos is not mounted." >&2
+              exit 1
+            fi
+
+            findmnt --mountpoint /mnt/storage/photos --output TARGET,SOURCE,FSTYPE,OPTIONS
+            systemctl start arr-media.target immich-photos.target
             systemctl is-active --quiet arr-media.target
-            echo "Media storage is mounted and arr-media.target is active."
+            systemctl is-active --quiet immich-photos.target
+            echo "Media and photo storage are mounted; arr-media.target and immich-photos.target are active."
           '';
         };
       in
