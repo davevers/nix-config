@@ -1,0 +1,82 @@
+[dark]
+# preferred_background: 232a2e
+fish_color_autosuggestion 58686d
+fish_color_cancel f57f82
+fish_color_command fae6ef
+fish_color_comment 839e9a
+fish_color_cwd cbe3b3
+fish_color_cwd_root f7a182
+fish_color_end 6f8788
+fish_color_error f57f82
+fish_color_escape f5d098
+fish_color_hg_added cbe3b3
+fish_color_hg_clean cbe3b3
+fish_color_hg_copied f3c0e5
+fish_color_hg_deleted f57f82
+fish_color_hg_dirty f7a182
+fish_color_hg_modified b3e3ca
+fish_color_hg_renamed f3c0e5
+fish_color_hg_unmerged f57f82
+fish_color_hg_untracked f5d098
+fish_color_history_current --bold fae6ef
+fish_color_host 96b4aa
+fish_color_host_remote f7a182
+fish_color_keyword f57f82
+fish_color_normal f8f9e8
+fish_color_operator 96b4aa
+fish_color_option adc9bc
+fish_color_param f8f9e8
+fish_color_quote dbe6af
+fish_color_redirection --bold afd9e6
+fish_color_search_match --bold adc9bc --background=374145
+fish_color_selection --background=2b3337
+fish_color_status f57f82
+fish_color_user b3e6db
+fish_color_valid_path --underline
+fish_pager_color_completion b3e6db
+fish_pager_color_description 6f8788
+fish_pager_color_prefix --bold --underline
+fish_pager_color_progress --bold adc9bc --background=2b3337
+fish_pager_color_selected_background --background=374145
+
+
+[light]
+# preferred_background: f5efe6
+fish_color_autosuggestion acb5a4
+fish_color_cancel c58687
+fish_color_command c29fb2
+fish_color_comment 707d76
+fish_color_cwd 91a77a
+fish_color_cwd_root c69883
+fish_color_end 829084
+fish_color_error c58687
+fish_color_escape c4aa80
+fish_color_hg_added 91a77a
+fish_color_hg_clean 91a77a
+fish_color_hg_copied c499b8
+fish_color_hg_deleted c58687
+fish_color_hg_dirty c69883
+fish_color_hg_modified 74a48b
+fish_color_hg_renamed c499b8
+fish_color_hg_unmerged c58687
+fish_color_hg_untracked c4aa80
+fish_color_history_current --bold c29fb2
+fish_color_host 576869
+fish_color_host_remote c69883
+fish_color_keyword c58687
+fish_color_normal 2b3034
+fish_color_operator 576869
+fish_color_option 455355
+fish_color_param 2b3034
+fish_color_quote abb182
+fish_color_redirection --bold 7799a3
+fish_color_search_match --bold 455355 --background=e6e1d3
+fish_color_selection --background=ede8dd
+fish_color_status c58687
+fish_color_user 719f96
+fish_color_valid_path --underline
+fish_pager_color_completion 719f96
+fish_pager_color_description 829084
+fish_pager_color_prefix --bold --underline
+fish_pager_color_progress --bold 455355 --background=ede8dd
+fish_pager_color_selected_background --background=e6e1d3

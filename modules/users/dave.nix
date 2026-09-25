@@ -26,6 +26,7 @@
       hjem =
         { pkgs, ... }:
         {
+          clobberFiles = true;
           impure = {
             enable = true;
             dotsDir = "${../../dots}";

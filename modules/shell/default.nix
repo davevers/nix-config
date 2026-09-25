@@ -9,6 +9,7 @@
         environment.systemPackages = with pkgs; [
           btop
           cbonsai
+          fastfetch
           fzf
           ripgrep
           eza
