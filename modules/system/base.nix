@@ -12,7 +12,10 @@
           settings = {
             auto-optimise-store = true;
             trusted-users = [ "@wheel" ];
-            experimental-features = "nix-command flakes";
+            experimental-features = [
+              "nix-command"
+              "flakes"
+            ];
             extra-substituters = [
               "https://cache.nixos.org"
             ];
