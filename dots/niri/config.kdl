@@ -71,17 +71,17 @@ layout {
     focus-ring {
         on
         width 3
-        active-color "#d7827e"
+        active-color "#f5d098"
         inactive-color "#9893a5"
-        urgent-color "#b4637a"
+        urgent-color "#f57f82"
     }
 
     border {
         off
         width 3
-        active-color "#d7827e"
+        active-color "#f5d098"
         inactive-color "#9893a5"
-        urgent-color "#b4637a"
+        urgent-color "#f57f82"
     }
 
     shadow {
