@@ -11,8 +11,8 @@
       hjem = {
         xdg.config.files = {
           "bat/config".text = ''
-            --theme-dark="Evergarden Fall"
-            --theme-light="Evergarden Summer"
+            --theme-dark="evergarden-fall"
+            --theme-light="evergarden-summer"
             --theme=auto
           '';
           "bat/themes/Rose-Pine-Dawn.tmTheme".source = "${self}/dots/bat/Rose-Pine-Dawn.tmTheme";

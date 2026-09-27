@@ -70,17 +70,17 @@ layout {
 
     focus-ring {
         on
-        width 3
-        active-color "#f5d098"
-        inactive-color "#9893a5"
+        width 2
+        active-color "#b2caed"
+        inactive-color "#58686d"
         urgent-color "#f57f82"
     }
 
     border {
         off
-        width 3
-        active-color "#f5d098"
-        inactive-color "#9893a5"
+        width 2
+        active-color "#b2caed"
+        inactive-color "#58686d"
         urgent-color "#f57f82"
     }
 
@@ -123,18 +123,27 @@ window-rule {
 // Example: enable rounded corners for all windows.
 // (This example rule is commented out with a "/-" in front.)
 window-rule {
-     geometry-corner-radius 8
+     geometry-corner-radius 12
     clip-to-geometry true
 	  tiled-state true
 	  draw-border-with-background false
 }
 
-// Floating Noctalia settings window.
 window-rule {
-  match app-id="dev.noctalia.Noctalia.Settings"
-  open-floating true
-  default-column-width { fixed 1080; }
-  default-window-height { fixed 920; }
+    match app-id="com.mitchellh.ghostty"
+    background-effect {
+        blur true
+    }
+}
+
+window-rule {
+    match title="Noctalia Settings"
+    background-effect {
+        blur true
+    }
+    open-floating true
+    default-column-width { fixed 1080; }
+    default-window-height { fixed 920; }
 }
 
 layer-rule {

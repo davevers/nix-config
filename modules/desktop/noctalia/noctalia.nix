@@ -26,7 +26,7 @@
     provides.to-users = {
       hjem = {
         files = {
-          "Pictures/wallpapers/rose-pine".source = inputs.wallpkgs + "/wallpapers/rose-pine";
+          "Pictures/wallpapers/everforest".source = inputs.wallpkgs + "/wallpapers/everforest";
         };
         xdg.config.files = {
           "noctalia/palettes/evergarden.json".source = ./evergarden.json;

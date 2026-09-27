@@ -6,6 +6,7 @@
         fonts.packages = with pkgs; [
           adwaita-fonts
           lilex
+          maple-mono.NF
           noto-fonts
           noto-fonts-cjk-sans
           noto-fonts-color-emoji
@@ -25,7 +26,7 @@
           ];
 
           monospace = lib.mkAfter [
-            "Lilex"
+            "Maple Mono NF"
             "DejaVu Sans Mono"
             "Symbols Nerd Font Mono"
           ];

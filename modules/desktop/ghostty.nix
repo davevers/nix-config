@@ -1,4 +1,4 @@
-{
+{ self, ... }: {
   den.aspects.ghostty = {
     nixos =
       { pkgs, ... }:
@@ -18,6 +18,7 @@
             in
             {
               "ghostty/config.ghostty".source = dots + "/ghostty/config.ghostty";
+              "ghostty/themes".source = "${self}/dots/ghostty/themes";
             };
         };
     };

@@ -3,7 +3,7 @@
     nixos =
       { pkgs, ... }:
       {
-        environment.systemPackages = with pkgs; [ zed-editor-fhs ];
+        environment.systemPackages = with pkgs; [ gram ];
       };
   };
 }

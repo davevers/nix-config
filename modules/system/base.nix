@@ -50,6 +50,8 @@
           LC_TIME = "nl_NL.UTF-8";
         };
 
+        programs.nix-ld.enable = true;
+
         environment.systemPackages = with pkgs; [
           # smartmontools
           btop

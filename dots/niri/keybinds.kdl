@@ -14,7 +14,8 @@ binds {
     XF86MonBrightnessDown { spawn-sh "noctalia msg brightness-down"; }
 
     Mod+Shift+Slash { show-hotkey-overlay; }
-    Mod+Return { spawn "kitty"; }
+    Mod+Return { spawn "ghostty"; }
+    Mod+B { spawn "helium"; }
 
     Mod+O repeat=false { toggle-overview; }
 
