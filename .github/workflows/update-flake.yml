@@ -1,0 +1,83 @@
+name: Update flake
+
+on:
+  schedule:
+    - cron: "0 5 * * 7"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: update-flake
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.lock.outputs.changed }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: DeterminateSystems/determinate-nix-action@v3
+        with:
+          extra-conf: |
+            accept-flake-config = true
+      - name: Update flake.lock
+        run: nix flake update
+      - name: Check for lock file changes
+        id: lock
+        run: |
+          if git diff --quiet -- flake.lock; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Save updated lock file
+        if: steps.lock.outputs.changed == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: flake-lock
+          path: flake.lock
+          if-no-files-found: error
+
+  build:
+    needs: update
+    if: needs.update.outputs.changed == 'true'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        host: [loki, virmire, noveria]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
+        with:
+          name: flake-lock
+      - uses: DeterminateSystems/determinate-nix-action@v3
+        with:
+          extra-conf: |
+            accept-flake-config = true
+      - name: Build ${{ matrix.host }}
+        run: nix build --no-link --print-build-logs '.#nixosConfigurations.${{ matrix.host }}.config.system.build.toplevel'
+
+  pull-request:
+    needs: [update, build]
+    if: needs.update.outputs.changed == 'true' && needs.build.result == 'success'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
+        with:
+          name: flake-lock
+      - uses: peter-evans/create-pull-request@v8
+        with:
+          add-paths: flake.lock
+          branch: automation/update-flake-lock
+          commit-message: "chore: update flake.lock"
+          title: "chore: update flake.lock"
+          body: |
+            Updated flake inputs. The workflow built the NixOS system closures for loki, virmire, and noveria with this lock file.
