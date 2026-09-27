@@ -4,11 +4,11 @@
     includes = with den.aspects; [
       firefox
       ghostty
-      greeterd
       flatpak
       kitty
       niri
       noctalia
+      noctalia-greeter
       proton
       obsidian
       vscodium
@@ -32,7 +32,7 @@
             {
               settings."org/gnome/desktop/interface" = {
                 font-name = "Adwaita Sans 11";
-                monospace-font-name = "Lilex 12";
+                monospace-font-name = "Maple Mono NF 14";
                 color-scheme = "prefer-light";
                 gtk-theme = "Adwaita";
               };
