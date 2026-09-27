@@ -5,6 +5,7 @@
       firefox
       ghostty
       flatpak
+      helium
       kitty
       niri
       noctalia
