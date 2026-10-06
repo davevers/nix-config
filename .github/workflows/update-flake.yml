@@ -43,7 +43,7 @@ jobs:
 
   pull-request:
     needs: update
-    if: needs.update.outputs.changed == 'true' && needs.build.result == 'success'
+    if: needs.update.outputs.changed == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: write
