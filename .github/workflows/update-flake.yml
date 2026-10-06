@@ -4,19 +4,27 @@ on:
   schedule:
     - cron: "0 5 * * 0"
   workflow_dispatch:
+  push:
+    branches:
+      - "automation/update-flake-*"
 
 permissions:
   contents: read
 
 concurrency:
-  group: update-flake
-  cancel-in-progress: false
+  group: update-flake-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'push' }}
 
 jobs:
   update:
+    if: github.event_name != 'push'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     outputs:
-      changed: ${{ steps.lock.outputs.changed }}
+      changed: ${{ steps.branch.outputs.changed }}
+      branch: ${{ steps.branch.outputs.branch }}
+      sha: ${{ steps.branch.outputs.sha }}
     steps:
       - uses: actions/checkout@v7
       - uses: DeterminateSystems/determinate-nix-action@v3
@@ -25,46 +33,29 @@ jobs:
             accept-flake-config = true
       - name: Update flake.lock
         run: nix flake update
-      - name: Check for lock file changes
-        id: lock
+      - name: Commit and push update branch
+        id: branch
         run: |
           if git diff --quiet -- flake.lock; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "changed=true" >> "$GITHUB_OUTPUT"
+            exit 0
           fi
-      - name: Save updated lock file
-        if: steps.lock.outputs.changed == 'true'
-        uses: actions/upload-artifact@v7
-        with:
-          name: flake-lock
-          path: flake.lock
-          if-no-files-found: error
 
-  pull-request:
-    needs: update
-    if: needs.update.outputs.changed == 'true'
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
-    steps:
-      - uses: actions/checkout@v7
-      - uses: actions/download-artifact@v8
-        with:
-          name: flake-lock
-      - uses: peter-evans/create-pull-request@v8
-        with:
-          add-paths: flake.lock
-          branch: automation/update-flake-lock
-          commit-message: "chore: update flake.lock"
-          title: "chore: update flake.lock"
-          body: |
-            Updated flake inputs. The workflow built the NixOS system closures for loki, virmire, and noveria with this lock file.
+          branch="automation/update-flake-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$branch"
+          git add flake.lock
+          git commit -m "chore: update flake.lock"
+          git push --set-upstream origin "$branch"
+
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+          echo "branch=$branch" >> "$GITHUB_OUTPUT"
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
   build:
-    needs: [update, pull-request]
-    if: needs.update.outputs.changed == 'true'
+    needs: update
+    if: ${{ !cancelled() && (github.event_name == 'push' || needs.update.outputs.changed == 'true') }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -72,12 +63,45 @@ jobs:
         host: [loki, virmire, noveria]
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/download-artifact@v8
         with:
-          name: flake-lock
+          ref: ${{ github.event_name == 'push' && github.sha || needs.update.outputs.sha }}
       - uses: DeterminateSystems/determinate-nix-action@v3
         with:
           extra-conf: |
             accept-flake-config = true
       - name: Build ${{ matrix.host }}
         run: nix build --no-link --print-build-logs '.#nixosConfigurations.${{ matrix.host }}.config.system.build.toplevel'
+
+  pull-request:
+    needs: [update, build]
+    if: ${{ !cancelled() && needs.build.result == 'success' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v7
+      - name: Open pull request for tested commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: ${{ github.event_name == 'push' && github.ref_name || needs.update.outputs.branch }}
+          TESTED_SHA: ${{ github.event_name == 'push' && github.sha || needs.update.outputs.sha }}
+          BASE: ${{ github.event.repository.default_branch }}
+        run: |
+          current_sha=$(git ls-remote origin "refs/heads/$BRANCH" | cut -f1)
+          if [ "$current_sha" != "$TESTED_SHA" ]; then
+            echo "The branch moved while the build ran; a newer run will test it."
+            exit 0
+          fi
+
+          existing_pr=$(gh pr list --head "$BRANCH" --base "$BASE" --state open --limit 1 --json number --jq '.[0].number // empty')
+          if [ -n "$existing_pr" ]; then
+            echo "Pull request #$existing_pr already exists."
+            exit 0
+          fi
+
+          gh pr create \
+            --head "$BRANCH" \
+            --base "$BASE" \
+            --title "chore: update flake.lock" \
+            --body "Updated flake inputs. The workflow built the NixOS system closures for loki, virmire, and noveria with this commit."
