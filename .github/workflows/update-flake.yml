@@ -41,28 +41,8 @@ jobs:
           path: flake.lock
           if-no-files-found: error
 
-  build:
-    needs: update
-    if: needs.update.outputs.changed == 'true'
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        host: [loki, virmire, noveria]
-    steps:
-      - uses: actions/checkout@v7
-      - uses: actions/download-artifact@v8
-        with:
-          name: flake-lock
-      - uses: DeterminateSystems/determinate-nix-action@v3
-        with:
-          extra-conf: |
-            accept-flake-config = true
-      - name: Build ${{ matrix.host }}
-        run: nix build --no-link --print-build-logs '.#nixosConfigurations.${{ matrix.host }}.config.system.build.toplevel'
-
   pull-request:
-    needs: [update, build]
+    needs: update
     if: needs.update.outputs.changed == 'true' && needs.build.result == 'success'
     runs-on: ubuntu-latest
     permissions:
@@ -81,3 +61,23 @@ jobs:
           title: "chore: update flake.lock"
           body: |
             Updated flake inputs. The workflow built the NixOS system closures for loki, virmire, and noveria with this lock file.
+
+  build:
+    needs: [update, pull-request]
+    if: needs.update.outputs.changed == 'true'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        host: [loki, virmire, noveria]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
+        with:
+          name: flake-lock
+      - uses: DeterminateSystems/determinate-nix-action@v3
+        with:
+          extra-conf: |
+            accept-flake-config = true
+      - name: Build ${{ matrix.host }}
+        run: nix build --no-link --print-build-logs '.#nixosConfigurations.${{ matrix.host }}.config.system.build.toplevel'
