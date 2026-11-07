@@ -40,7 +40,6 @@
         '';
         initrd.luks.devices."luks-4d3dca95-cccf-48da-b970-cae48ccecfd9".device =
           "/dev/disk/by-uuid/4d3dca95-cccf-48da-b970-cae48ccecfd9";
-        initrd.systemd.enable = true;
       };
 
       services.pipewire.wireplumber.extraConfig."51-pebble-x-volume" = {
