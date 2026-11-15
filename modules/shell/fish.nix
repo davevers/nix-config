@@ -26,15 +26,8 @@
             set fish_greeting
             set fish_cursor_insert line blink
             fish_config theme choose "everforest-auto"
-            set -Ux FZF_DEFAULT_OPTS '--color=base16'
-            function sys_color_scheme_is_dark
-                string match -q '*prefer-dark*' (dconf read /org/gnome/desktop/interface/color-scheme)
-            end
-            if sys_color_scheme_is_dark
-                set -U fzf_preview_file_cmd bat --color=always --style=numbers --theme=everforest-dark
-            else
-                set -U fzf_preview_file_cmd bat --color=always --style=numbers --theme=everforest-light
-            end
+            set -gx FZF_DEFAULT_OPTS '--color=base16'
+            set -g fzf_preview_file_cmd bat --color=always --style=numbers --theme=auto:always
           '';
         };
       };
