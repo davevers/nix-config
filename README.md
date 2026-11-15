@@ -1,33 +1,21 @@
-# Getting Started Guide
+# Nix config
 
-Steps you can follow after cloning this template:
+My NixOS configuration, using flakes, den and nixos-unstable.
 
-- Be sure to read the [den documentation](https://den.denful.dev)
+- `loki`: workstation with Niri and Noctalia.
+- `noveria`: home server for media and photos.
+- `virmire`: server running Pocket ID.
 
-- Update den input.
+Host configs live in `modules/hosts/`, shared setups in `modules/profiles/`, and apps and services in the other `modules/` folders.
 
-```console
-nix flake update den
+Run from this repo on NixOS with flakes enabled. Replace `loki` with the host you want:
+
+```sh
+# Build without applying
+nix run .#loki -- switch --dry
+
+# Apply to the local machine
+nix run .#loki -- switch
 ```
 
-- Edit [modules/hosts.nix](modules/hosts.nix)
-
-- Build
-
-```console
-# default action is build
-nix run .#igloo
-
-# pass any other nh action
-nix run .#igloo -- switch
-```
-
-- Run the VM
-
-We recommend to use a VM develop cycle so you can play with the system before applying to your hardware.
-
-See [modules/vm.nix](modules/vm.nix)
-
-```console
-nix run .#vm
-```
+`flake.nix` is generated. After changing input declarations in the modules, regenerate it with `nix run .#write-flake`.
