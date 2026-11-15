@@ -27,6 +27,9 @@
 
     # host NixOS configuration
     nixos = {
+      # Preserve the existing compatibility baseline; do not track nixpkgs.
+      system.stateVersion = "25.11";
+
       boot = {
         loader = {
           systemd-boot.enable = true;
