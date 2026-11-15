@@ -11,6 +11,7 @@
           cbonsai
           fastfetch
           fzf
+          hledger
           ripgrep
           eza
           fd
