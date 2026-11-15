@@ -1,5 +1,7 @@
 {
   den.aspects.incus = {
+    provides.to-users.user.extraGroups = [ "incus-admin" ];
+
     nixos = {
       networking.nftables.enable = true;
       networking.firewall.trustedInterfaces = [
