@@ -1,8 +1,4 @@
-{
-  den,
-  lib,
-  ...
-}:
+{ den, ... }:
 {
   den.hosts.x86_64-linux.noveria.users.dave = {
   };
@@ -165,7 +161,8 @@
         };
 
         networking.hostName = "noveria";
-        system.stateVersion = lib.mkDefault "26.05";
+        # Preserve the existing compatibility baseline; do not track nixpkgs.
+        system.stateVersion = "25.11";
         # security.sudo.wheelNeedsPassword = false;
 
         networking.nftables.enable = true;
