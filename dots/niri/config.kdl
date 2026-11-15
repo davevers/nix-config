@@ -38,7 +38,7 @@ mouse {
 }
 
 cursor {
-    xcursor-theme "BreezeX-RosePineDawn-Linux"
+    xcursor-theme "everforest-cursors"
     xcursor-size 32
     }
 
@@ -71,9 +71,9 @@ layout {
     focus-ring {
         on
         width 2
-        active-color "#b2caed"
-        inactive-color "#58686d"
-        urgent-color "#f57f82"
+        active-color "#384B55"
+        inactive-color "#7A8478"
+        urgent-color "#E67E80"
     }
 
     border {

@@ -40,6 +40,8 @@
             }
           ];
         };
+
+        programs.localsend.enable = true;
       };
 
     provides.to-users = {

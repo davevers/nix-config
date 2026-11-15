@@ -5,7 +5,7 @@
       { pkgs, ... }:
       let
         polkit-agent = pkgs.writeShellScriptBin "polkit-agent" ''
-            exec ${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1
+          exec ${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1
         '';
       in
       {
@@ -21,6 +21,7 @@
         };
         environment.systemPackages = with pkgs; [
           rose-pine-cursor
+          everforest-cursors
           cliphist
           wl-clipboard
           polkit-agent

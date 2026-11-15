@@ -18,5 +18,5 @@ window-show-tab-bar = auto
 gtk-wide-tabs = false
 gtk-toolbar-style = flat
 window-theme = ghostty
-theme = dark:evergarden-fall.conf,light:evergarden-summer.conf
+theme = dark:everforest-dark.conf,light:everforest-light.conf
 background-opacity = 1

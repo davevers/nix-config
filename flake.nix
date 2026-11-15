@@ -1,15 +1,11 @@
-# DO-NOT-EDIT. This file was auto-generated using github:vic/flake-file.
+# DO-NOT-EDIT. This file was auto-generated using github:denful/flake-file.
 # Use `nix run .#write-flake` to regenerate it.
 {
   outputs = inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; } (inputs.import-tree ./modules);
 
   nixConfig = {
-    extra-substituters = [
-      "https://cache.numtide.com"
-      "https://noctalia.cachix.org"
-    ];
+    extra-substituters = [ "https://noctalia.cachix.org" ];
     extra-trusted-public-keys = [
-      "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
       "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
     ];
   };
@@ -34,8 +30,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     hjem-impure.url = "github:Rexcrazy804/hjem-impure";
-    import-tree.url = "github:vic/import-tree";
-    llm-agents.url = "github:numtide/llm-agents.nix";
+    import-tree.url = "github:denful/import-tree";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     noctalia.url = "github:noctalia-dev/noctalia/cachix";
     sops-nix = {

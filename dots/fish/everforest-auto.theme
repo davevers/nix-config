@@ -1,0 +1,111 @@
+# name: Everforest Hard
+# url: https://github.com/sainnhe/everforest
+# Fish 4.3+; automatic light/dark selection based on terminal appearance.
+
+[dark]
+# preferred_background: 272e33
+# Everforest Dark Hard
+fish_color_normal D3C6AA
+fish_color_command A7C080
+fish_color_keyword E67E80
+fish_color_quote 83C092
+fish_color_redirection E69875
+fish_color_end E69875
+fish_color_error E67E80 --bold
+fish_color_param D3C6AA
+fish_color_option 7FBBB3
+fish_color_comment 859289
+fish_color_operator E69875
+fish_color_escape DBBC7F
+fish_color_autosuggestion 7A8478
+fish_color_valid_path --underline
+fish_color_selection D3C6AA --background=4C3743
+fish_color_search_match D3C6AA --background=45443C
+fish_color_history_current --bold
+fish_color_cancel --reverse
+fish_color_cwd 7FBBB3
+fish_color_cwd_root E67E80
+fish_color_user A7C080
+fish_color_host D3C6AA
+fish_color_host_remote DBBC7F
+fish_color_status E67E80
+fish_pager_color_background --background=272E33
+fish_pager_color_prefix A7C080 --bold
+fish_pager_color_completion D3C6AA
+fish_pager_color_description 859289
+fish_pager_color_progress DBBC7F --background=374145
+fish_pager_color_selected_background --background=414B50
+fish_pager_color_selected_prefix A7C080 --bold
+fish_pager_color_selected_completion D3C6AA
+fish_pager_color_selected_description 9DA9A0
+fish_pager_color_secondary_background --background=2E383C
+
+[light]
+# preferred_background: fffbef
+# Everforest Light Hard
+fish_color_normal 5C6A72
+fish_color_command 8DA101
+fish_color_keyword F85552
+fish_color_quote 35A77C
+fish_color_redirection F57D26
+fish_color_end F57D26
+fish_color_error F85552 --bold
+fish_color_param 5C6A72
+fish_color_option 3A94C5
+fish_color_comment 829181
+fish_color_operator F57D26
+fish_color_escape DFA000
+fish_color_autosuggestion A6B0A0
+fish_color_valid_path --underline
+fish_color_selection 5C6A72 --background=F0F2D4
+fish_color_search_match 5C6A72 --background=FEF2D5
+fish_color_history_current --bold
+fish_color_cancel --reverse
+fish_color_cwd 3A94C5
+fish_color_cwd_root F85552
+fish_color_user 8DA101
+fish_color_host 5C6A72
+fish_color_host_remote F57D26
+fish_color_status F85552
+fish_pager_color_background --background=FFFBEF
+fish_pager_color_prefix 8DA101 --bold
+fish_pager_color_completion 5C6A72
+fish_pager_color_description 829181
+fish_pager_color_progress 5C6A72 --background=F3F5D9
+fish_pager_color_selected_background --background=EDEADA
+fish_pager_color_selected_prefix 8DA101 --bold
+fish_pager_color_selected_completion 5C6A72
+fish_pager_color_selected_description 829181
+fish_pager_color_secondary_background --background=F8F5E4
+
+[unknown]
+# When the terminal cannot report its appearance, use terminal ANSI colors.
+fish_color_normal --reset
+fish_color_command green
+fish_color_keyword red
+fish_color_quote green
+fish_color_redirection yellow
+fish_color_end yellow
+fish_color_error red --bold
+fish_color_param --reset
+fish_color_option cyan
+fish_color_comment brblack
+fish_color_operator yellow
+fish_color_escape yellow
+fish_color_autosuggestion brblack
+fish_color_valid_path --underline
+fish_color_selection --reverse
+fish_color_search_match --reverse
+fish_color_history_current --bold
+fish_color_cancel --reverse
+fish_color_cwd cyan
+fish_color_cwd_root red
+fish_color_user green
+fish_color_host --reset
+fish_color_host_remote yellow
+fish_color_status red
+fish_pager_color_prefix green --bold
+fish_pager_color_completion --reset
+fish_pager_color_description brblack
+fish_pager_color_progress yellow
+fish_pager_color_selected_background --reverse

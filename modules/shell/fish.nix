@@ -25,15 +25,15 @@
             set sponge_purge_only_on_exit true
             set fish_greeting
             set fish_cursor_insert line blink
-            fish_config theme choose "evergarden-auto"
+            fish_config theme choose "everforest-auto"
             set -Ux FZF_DEFAULT_OPTS '--color=base16'
             function sys_color_scheme_is_dark
                 string match -q '*prefer-dark*' (dconf read /org/gnome/desktop/interface/color-scheme)
             end
             if sys_color_scheme_is_dark
-                set -U fzf_preview_file_cmd bat --color=always --style=numbers --theme=evergarden-fall
+                set -U fzf_preview_file_cmd bat --color=always --style=numbers --theme=everforest-dark
             else
-                set -U fzf_preview_file_cmd bat --color=always --style=numbers --theme=evergarden-summer
+                set -U fzf_preview_file_cmd bat --color=always --style=numbers --theme=everforest-light
             end
           '';
         };
@@ -44,6 +44,7 @@
         xdg.config.files = {
           "fish/themes/rose-pine-auto.theme".source = "${self}/dots/fish/rose-pine-auto.theme";
           "fish/themes/evergarden-auto.theme".source = "${self}/dots/fish/evergarden-auto.theme";
+          "fish/themes/everforest-auto.theme".source = "${self}/dots/fish/everforest-auto.theme";
         };
       };
     };
