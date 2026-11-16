@@ -7,6 +7,7 @@
       den.aspects.arr
       den.aspects.immich
       den.aspects.jellyfin
+      den.aspects.paperless
       den.aspects.seerr
       den.aspects.server
       den.aspects.smart
@@ -73,8 +74,8 @@
               trap - EXIT
             fi
 
-            echo "Starting the media and photo storage mounts and application stacks..."
-            systemctl start mnt-storage-media.mount mnt-storage-photos.mount
+            echo "Starting the media, photo and document storage mounts and application stacks..."
+            systemctl start mnt-storage-media.mount mnt-storage-photos.mount mnt-storage-documents.mount
 
             if ! findmnt --mountpoint /mnt/storage/media >/dev/null; then
               echo "/mnt/storage/media is not mounted." >&2
@@ -88,10 +89,17 @@
             fi
 
             findmnt --mountpoint /mnt/storage/photos --output TARGET,SOURCE,FSTYPE,OPTIONS
-            systemctl start arr-media.target immich-photos.target
+            if ! findmnt --mountpoint /mnt/storage/documents >/dev/null; then
+              echo "/mnt/storage/documents is not mounted." >&2
+              exit 1
+            fi
+
+            findmnt --mountpoint /mnt/storage/documents --output TARGET,SOURCE,FSTYPE,OPTIONS
+            systemctl start arr-media.target immich-photos.target paperless-documents.target
             systemctl is-active --quiet arr-media.target
             systemctl is-active --quiet immich-photos.target
-            echo "Media and photo storage are mounted; arr-media.target and immich-photos.target are active."
+            systemctl is-active --quiet paperless-documents.target
+            echo "Media, photo and document storage are mounted; arr-media.target, immich-photos.target and paperless-documents.target are active."
           '';
         };
       in
