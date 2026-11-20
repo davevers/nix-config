@@ -135,8 +135,13 @@
           )
           {
             paperless-scheduler = {
+              # Keep the five-minute Celery Beat debug messages off the HDDs.
+              environment.PAPERLESS_LOGGING_DIR = "/run/paperless-scheduler";
+
               # Celery syncs its task schedule even when no tasks are due.
               serviceConfig = {
+                RuntimeDirectory = "paperless-scheduler";
+                RuntimeDirectoryMode = "0700";
                 StateDirectory = schedulerStateDir;
                 StateDirectoryMode = "0700";
                 ExecStart = lib.mkForce "${cfg.package}/bin/celery --app paperless beat --loglevel INFO --schedule ${schedulerDatabase}";
