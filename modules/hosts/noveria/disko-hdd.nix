@@ -1,4 +1,12 @@
-{ den, inputs, ... }:
+{
+  den,
+  inputs,
+  lib,
+  ...
+}:
+let
+  layout = import ./_storage-layout.nix;
+in
 {
   den.aspects.hdd-provision =
     { host, ... }:
@@ -11,15 +19,15 @@
           disk = {
             data1 = {
               type = "disk";
-              device = "/dev/disk/by-id/ata-ST8000NM0045-1RL112_ZA159V83";
+              device = layout.disks.data1.device;
               content = {
                 type = "gpt";
                 partitions = {
-                  crypt_p1 = {
+                  "crypt_${layout.disks.data1.mapperName}" = {
                     size = "100%";
                     content = {
                       type = "luks";
-                      name = "p1";
+                      name = layout.disks.data1.mapperName;
                       initrdUnlock = false;
                     };
                   };
@@ -29,15 +37,15 @@
 
             data2 = {
               type = "disk";
-              device = "/dev/disk/by-id/ata-ST8000NM0045-1RL112_ZA158CRD";
+              device = layout.disks.data2.device;
               content = {
                 type = "gpt";
                 partitions = {
-                  crypt_p2 = {
+                  "crypt_${layout.disks.data2.mapperName}" = {
                     size = "100%";
                     content = {
                       type = "luks";
-                      name = "p2";
+                      name = layout.disks.data2.mapperName;
                       initrdUnlock = false;
                       content = {
                         type = "btrfs";
@@ -47,50 +55,18 @@
                           "raid1"
                           "-m"
                           "raid1"
-                          "/dev/mapper/p1"
+                          layout.primaryMapperDevice
                         ];
 
-                        subvolumes = {
-                          "@photos" = {
-                            mountpoint = "/mnt/storage/photos";
-                            mountOptions = [
-                              "noauto"
-                              "nofail"
-                              "compress=zstd"
-                              "noatime"
-                            ];
-                          };
-
-                          "@media" = {
-                            mountpoint = "/mnt/storage/media";
-                            mountOptions = [
-                              "noauto"
-                              "nofail"
-                              "compress=zstd"
-                              "noatime"
-                            ];
-                          };
-
-                          "@documents" = {
-                            mountpoint = "/mnt/storage/documents";
-                            mountOptions = [
-                              "noauto"
-                              "nofail"
-                              "compress=zstd"
-                              "noatime"
-                            ];
-                          };
-
-                          "@backups" = {
-                            mountpoint = "/mnt/storage/backups";
-                            mountOptions = [
-                              "noauto"
-                              "nofail"
-                              "compress=zstd"
-                              "noatime"
-                            ];
-                          };
-                        };
+                        subvolumes = builtins.listToAttrs (
+                          map (
+                            volume:
+                            lib.nameValuePair volume.subvolume {
+                              inherit (volume) mountpoint;
+                              inherit (layout) mountOptions;
+                            }
+                          ) layout.volumes
+                        );
                       };
                     };
                   };
