@@ -1,4 +1,4 @@
-{ den, lib, ... }:
+{ lib, ... }:
 {
   den.aspects.paperless = {
     nixos =
@@ -29,7 +29,14 @@
             PAPERLESS_OCR_LANGUAGE = "nld+eng";
             PAPERLESS_APPS = "allauth.socialaccount.providers.openid_connect";
             # Keep local login available while testing Pocket ID.
-            PAPERLESS_DISABLE_REGULAR_LOGIN = false;
+            PAPERLESS_DISABLE_REGULAR_LOGIN = true;
+
+            PAPERLESS_EMAIL_TASK_CRON = "disable";
+            PAPERLESS_WORKFLOW_SCHEDULED_TASK_CRON = "disable";
+
+            PAPERLESS_TRAIN_TASK_CRON = "0 3 * * *";
+            PAPERLESS_INDEX_TASK_CRON = "0 4 * * 0";
+            PAPERLESS_SANITY_TASK_CRON = "0 5 * * 0";
           };
           # Avoid rebuilding the OCR dependencies for a reduced language set.
           tesseractLanguages = null;
