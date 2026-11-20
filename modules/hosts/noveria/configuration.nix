@@ -15,188 +15,45 @@
       # den.aspects.hdd-provision
     ];
 
-    nixos =
-      { pkgs, ... }:
-      let
-        mediaStorageUnlock = pkgs.writeShellApplication {
-          name = "media-storage-unlock";
-          runtimeInputs = with pkgs; [
-            cryptsetup
-            systemd
-            util-linux
-          ];
-          text = ''
-            if (( EUID != 0 )); then
-              echo "Run this command as root (for example: sudo media-storage-unlock)." >&2
-              exit 1
-            fi
+    nixos = {
+      imports = [
+        ./_hardware-configuration.nix
+      ];
 
-            device_paths=(
-              "/dev/disk/by-id/ata-ST8000NM0045-1RL112_ZA159V83-part1"
-              "/dev/disk/by-id/ata-ST8000NM0045-1RL112_ZA158CRD-part1"
-            )
-            mapper_names=(p1 p2)
-            locked_indexes=()
-
-            for index in "''${!mapper_names[@]}"; do
-              if cryptsetup status "''${mapper_names[$index]}" >/dev/null 2>&1; then
-                echo "''${mapper_names[$index]} is already unlocked."
-              else
-                locked_indexes+=("$index")
-              fi
-            done
-
-            if (( ''${#locked_indexes[@]} > 0 )); then
-              if [[ ! -r /dev/tty || ! -w /dev/tty ]]; then
-                echo "A TTY is required for the passphrase prompt; connect with ssh -t." >&2
-                exit 1
-              fi
-
-              IFS= read -r -s -p "Media storage passphrase: " passphrase </dev/tty
-              echo >/dev/tty
-              trap 'unset passphrase' EXIT
-
-              if [[ -z "$passphrase" ]]; then
-                echo "The passphrase cannot be empty." >&2
-                exit 1
-              fi
-
-              for index in "''${locked_indexes[@]}"; do
-                echo "Unlocking ''${mapper_names[$index]}..."
-                if ! printf '%s' "$passphrase" \
-                  | cryptsetup open --key-file=- \
-                    "''${device_paths[$index]}" "''${mapper_names[$index]}"; then
-                  echo "Failed to unlock ''${mapper_names[$index]}; storage was not mounted." >&2
-                  exit 1
-                fi
-              done
-
-              unset passphrase
-              trap - EXIT
-            fi
-
-            echo "Starting the media, photo and document storage mounts and application stacks..."
-            systemctl start mnt-storage-media.mount mnt-storage-photos.mount mnt-storage-documents.mount
-
-            if ! findmnt --mountpoint /mnt/storage/media >/dev/null; then
-              echo "/mnt/storage/media is not mounted." >&2
-              exit 1
-            fi
-
-            findmnt --mountpoint /mnt/storage/media --output TARGET,SOURCE,FSTYPE,OPTIONS
-            if ! findmnt --mountpoint /mnt/storage/photos >/dev/null; then
-              echo "/mnt/storage/photos is not mounted." >&2
-              exit 1
-            fi
-
-            findmnt --mountpoint /mnt/storage/photos --output TARGET,SOURCE,FSTYPE,OPTIONS
-            if ! findmnt --mountpoint /mnt/storage/documents >/dev/null; then
-              echo "/mnt/storage/documents is not mounted." >&2
-              exit 1
-            fi
-
-            findmnt --mountpoint /mnt/storage/documents --output TARGET,SOURCE,FSTYPE,OPTIONS
-            systemctl start arr-media.target immich-photos.target paperless-documents.target
-            systemctl is-active --quiet arr-media.target
-            systemctl is-active --quiet immich-photos.target
-            systemctl is-active --quiet paperless-documents.target
-            echo "Media, photo and document storage are mounted; arr-media.target, immich-photos.target and paperless-documents.target are active."
-          '';
+      boot = {
+        loader = {
+          systemd-boot.enable = true;
+          efi.canTouchEfiVariables = true;
+          systemd-boot.configurationLimit = 10;
         };
-      in
-      {
-        imports = [
-          ./_hardware-configuration.nix
-        ];
-
-        boot = {
-          loader = {
-            systemd-boot.enable = true;
-            efi.canTouchEfiVariables = true;
-            systemd-boot.configurationLimit = 10;
-          };
-        };
-
-        hardware.graphics = {
-          enable = true;
-        };
-
-        fileSystems."/mnt/storage/photos" = {
-          device = "/dev/mapper/p1";
-          fsType = "btrfs";
-          options = [
-            "noauto"
-            "nofail"
-            "compress=zstd"
-            "noatime"
-            "subvol=@photos"
-          ];
-        };
-
-        fileSystems."/mnt/storage/media" = {
-          device = "/dev/mapper/p1";
-          fsType = "btrfs";
-          options = [
-            "noauto"
-            "nofail"
-            "compress=zstd"
-            "noatime"
-            "subvol=@media"
-          ];
-        };
-
-        fileSystems."/mnt/storage/documents" = {
-          device = "/dev/mapper/p1";
-          fsType = "btrfs";
-          options = [
-            "noauto"
-            "nofail"
-            "compress=zstd"
-            "noatime"
-            "subvol=@documents"
-          ];
-        };
-
-        fileSystems."/mnt/storage/backups" = {
-          device = "/dev/mapper/p1";
-          fsType = "btrfs";
-          options = [
-            "noauto"
-            "nofail"
-            "compress=zstd"
-            "noatime"
-            "subvol=@backups"
-          ];
-        };
-
-        # Skip routine SMART checks while an ATA disk is in standby.
-        services.smartd.defaults.autodetected = "-a -n standby";
-
-        networking.hostName = "noveria";
-        # Preserve the existing compatibility baseline; do not track nixpkgs.
-        system.stateVersion = "25.11";
-        # security.sudo.wheelNeedsPassword = false;
-
-        networking.nftables.enable = true;
-
-        networking.firewall = {
-          enable = true;
-
-          # Do not globally open 80/443 here.
-          allowedTCPPorts = [ ];
-          extraInputRules = ''
-            ip saddr 192.168.1.1/24 tcp dport {
-              80,    # HTTP
-              443,   # HTTPS
-            } accept
-          '';
-        };
-
-        environment.systemPackages = with pkgs; [
-          cryptsetup
-          btrfs-progs
-          mediaStorageUnlock
-        ];
       };
+
+      hardware.graphics = {
+        enable = true;
+      };
+
+      # Skip routine SMART checks while an ATA disk is in standby.
+      services.smartd.defaults.autodetected = "-a -n standby";
+
+      networking.hostName = "noveria";
+      # Preserve the existing compatibility baseline; do not track nixpkgs.
+      system.stateVersion = "25.11";
+      # security.sudo.wheelNeedsPassword = false;
+
+      networking.nftables.enable = true;
+
+      networking.firewall = {
+        enable = true;
+
+        # Do not globally open 80/443 here.
+        allowedTCPPorts = [ ];
+        extraInputRules = ''
+          ip saddr 192.168.1.1/24 tcp dport {
+            80,    # HTTP
+            443,   # HTTPS
+          } accept
+        '';
+      };
+    };
   };
 }
