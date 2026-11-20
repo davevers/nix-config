@@ -15,9 +15,9 @@
             OAUTH2_PROVIDER = "oidc";
             OAUTH2_OIDC_DISCOVERY_ENDPOINT = "https://auth.td-home.xyz";
             OAUTH2_REDIRECT_URL = "https://feeds.td-home.xyz/oauth2/oidc/callback";
-            # Link Pocket ID from the bootstrap account's settings first.
-            OAUTH2_USER_CREATION = 0;
-            DISABLE_LOCAL_AUTH = 0;
+            # Pocket ID controls who may sign in and create an account.
+            OAUTH2_USER_CREATION = 1;
+            DISABLE_LOCAL_AUTH = 1;
           };
         };
 
@@ -32,7 +32,7 @@
           mode = "0400";
           restartUnits = [ "miniflux.service" ];
           content = ''
-            ADMIN_USERNAME=dave
+            ADMIN_USERNAME=admin
             ADMIN_PASSWORD=${config.sops.placeholder."miniflux/admin-password"}
             OAUTH2_CLIENT_ID=${config.sops.placeholder."miniflux/oauth/client-id"}
             OAUTH2_CLIENT_SECRET=${config.sops.placeholder."miniflux/oauth/client-secret"}
