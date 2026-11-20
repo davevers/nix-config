@@ -7,6 +7,7 @@
       den.aspects.arr
       den.aspects.immich
       den.aspects.jellyfin
+      den.aspects.miniflux
       den.aspects.paperless
       den.aspects.seerr
       den.aspects.server

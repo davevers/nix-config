@@ -3,7 +3,7 @@
 My NixOS configuration, using flakes, den and nixos-unstable.
 
 - `loki`: workstation with Niri and Noctalia.
-- `noveria`: home server for media, photos and documents.
+- `noveria`: home server for media, photos, documents and RSS feeds.
 - `virmire`: server running Pocket ID.
 
 Host configs live in `modules/hosts/`, shared setups in `modules/profiles/`, and apps and services in the other `modules/` folders.
