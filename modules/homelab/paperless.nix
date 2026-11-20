@@ -8,6 +8,8 @@
         documentsMount = "mnt-storage-documents.mount";
         documentsTarget = "paperless-documents.target";
         paperlessRoot = "${documentsRoot}/paperless";
+        schedulerStateDir = "homelab/paperless-scheduler";
+        schedulerDatabase = "/var/lib/${schedulerStateDir}/celerybeat-schedule.db";
         cfg = config.services.paperless;
       in
       {
@@ -82,8 +84,21 @@
           '';
         };
 
-        # Keep queued document metadata on the encrypted filesystem too.
-        services.redis.servers.paperless.settings.dir = lib.mkForce "${paperlessRoot}/redis";
+        services.redis.servers.paperless = {
+          # Keep queued document metadata on the encrypted filesystem too.
+          settings.dir = lib.mkForce "${paperlessRoot}/redis";
+          # Idle Celery housekeeping can trigger the default 300-second rule.
+          save = [
+            [
+              900
+              1
+            ]
+            [
+              60
+              10000
+            ]
+          ];
+        };
 
         # The layout service creates these only after the filesystem is mounted.
         systemd.tmpfiles.settings."10-paperless" = lib.mkForce { };
@@ -119,6 +134,21 @@
             })
           )
           {
+            paperless-scheduler = {
+              # Celery syncs its task schedule even when no tasks are due.
+              serviceConfig = {
+                StateDirectory = schedulerStateDir;
+                StateDirectoryMode = "0700";
+                ExecStart = lib.mkForce "${cfg.package}/bin/celery --app paperless beat --loglevel INFO --schedule ${schedulerDatabase}";
+              };
+              preStart = lib.mkAfter ''
+                if [[ ! -e '${schedulerDatabase}' && -f '${cfg.dataDir}/celerybeat-schedule.db' ]]; then
+                  cp '${cfg.dataDir}/celerybeat-schedule.db' '${schedulerDatabase}.tmp'
+                  mv '${schedulerDatabase}.tmp' '${schedulerDatabase}'
+                fi
+              '';
+            };
+
             paperless-documents-layout = {
               description = "Prepare the Paperless document storage directories";
               requires = [ documentsMount ];

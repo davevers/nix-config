@@ -169,6 +169,9 @@
           ];
         };
 
+        # Skip routine SMART checks while an ATA disk is in standby.
+        services.smartd.defaults.autodetected = "-a -n standby";
+
         networking.hostName = "noveria";
         # Preserve the existing compatibility baseline; do not track nixpkgs.
         system.stateVersion = "25.11";
